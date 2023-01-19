@@ -15,13 +15,13 @@ export function useBlurHashDecode({accKey, meta}: BlurHashHookProps) {
   const hasBlurHash = Boolean(meta?.previewMetadata?.upload?.hash);
   useEffect(() => {
     setHash(null);
+    const bhstring = meta.previewMetadata.upload.hash;
+    if (BLURHASH_CACHE.has(bhstring)) {
+      return setHash(BLURHASH_CACHE.get(bhstring));
+    }
     _util.raf(() =>
       _util.raf(() => {
         if (!meta?.previewMetadata?.upload?.hash) return null;
-        const bhstring = meta.previewMetadata.upload.hash;
-        if (BLURHASH_CACHE.has(bhstring)) {
-          return setHash(BLURHASH_CACHE.get(bhstring));
-        }
         let res: string;
         try {
           const thumbMeta = meta.previewMetadata.upload.mediaMetadata;
