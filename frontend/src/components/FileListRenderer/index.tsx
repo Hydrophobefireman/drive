@@ -9,6 +9,7 @@ import {useAccountKeys} from "~/store/account-key-store";
 import {FileMetadata} from "~/types/files";
 import {useAuthState} from "~/util/bridge";
 
+import {_util} from "@hydrophobefireman/kit";
 import {SpinnerIcon} from "@hydrophobefireman/kit-icons";
 import {useAlerts} from "@hydrophobefireman/kit/alerts";
 import {TextButton} from "@hydrophobefireman/kit/button";
@@ -20,6 +21,7 @@ import {Select} from "@hydrophobefireman/kit/select";
 import {$Iterator, _collectors} from "@hydrophobefireman/lazy";
 import {
   Renderable,
+  useEffect,
   useMemo,
   useReducer,
   useState,
@@ -51,7 +53,10 @@ export function FileListRenderer() {
     "config::display-mode",
     "grid"
   );
-  const sort: SortFns = _sort as any;
+  const [sort, setSort] = useState<SortFns>(_sort as any);
+  useEffect(() => {
+    _util.raf(() => setSort(sort));
+  }, [_sort]);
   return (
     <div class={css({maxWidth: "1200px", margin: "auto"})}>
       <Box horizontal="center" class={css({marginTop: "2rem"})}>
@@ -76,7 +81,7 @@ export function FileListRenderer() {
           <Select
             buttonClass={css({width: "7rem"})}
             dropdownClass={css({textAlign: "center"})}
-            value={sort}
+            value={_sort}
             setValue={setValue}
             label="Sort"
             options={SORT_OPTIONS}
