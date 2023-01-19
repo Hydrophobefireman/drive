@@ -1,10 +1,11 @@
 import {Context} from "hono";
+import {uuid} from "~/util/uuid";
 
 import {Env, UserType} from "../types";
 import {clean} from "../util/clean";
 import {json} from "../util/json";
 import {jwt} from "./jwt";
-import {generateKey, hash} from "./keys";
+import {hash} from "./keys";
 
 function _namespace(id: string) {
   return `users::${id.trim().toLowerCase()}`;
@@ -43,7 +44,11 @@ export async function login(username: string, accountKey: string, c: Context) {
   });
 }
 
-export async function register(username: string, c: Context) {
+export async function register(
+  username: string,
+  accountKey: string,
+  c: Context
+) {
   if (
     !username ||
     username !== clean(username) ||
@@ -58,13 +63,12 @@ export async function register(username: string, c: Context) {
   if ((await (AUTH as KVNamespace).get(key)) != null) {
     return json({error: "User already exists"}, 400);
   }
-  const accountKey = generateKey();
   const user: UserType = {
     account_key_hash: await hash(accountKey),
     created_at: +new Date(),
     is_approved: true,
     user: username,
-    _integrity: crypto.randomUUID(),
+    _integrity: uuid() + uuid(),
   };
   await (AUTH as KVNamespace).put(key, JSON.stringify(user));
   const {account_key_hash, ...rest} = user;

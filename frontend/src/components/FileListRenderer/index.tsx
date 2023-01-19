@@ -1,267 +1,304 @@
 import {css} from "catom";
-import {useSharedStateValue} from "statedrive";
+import {useFileList} from "~/context/file-list";
+import {deleteFiles} from "~/handlers/files";
+import {downloadManager} from "~/handlers/managers/file-download-manager";
+import {FileDownloadTask} from "~/handlers/tasks/file-download-task";
+import {useLocalState} from "~/hooks/use-local-state";
+import {useFetchFileSignal} from "~/signals/file-signals";
+import {useAccountKeys} from "~/store/account-key-store";
+import {FileMetadata} from "~/types/files";
+import {useAuthState} from "~/util/bridge";
 
-import {FileListResponse} from "@/api-types/files";
-import {deleteFile} from "@/handlers/files";
-import {useBatchDownload} from "@/hooks/use-downloader";
-import {accountKeyStore} from "@/store/account-key-store";
-import {useAuthState} from "@/util/bridge";
-import {getEventPath} from "@/util/get-path";
-import {getFileFromKeyRoute} from "@/util/routes";
+import {SpinnerIcon} from "@hydrophobefireman/kit-icons";
 import {useAlerts} from "@hydrophobefireman/kit/alerts";
 import {TextButton} from "@hydrophobefireman/kit/button";
 import {Box} from "@hydrophobefireman/kit/container";
-import {_useHideScrollbar, useClickAway} from "@hydrophobefireman/kit/hooks";
-import {ChevronLeftIcon} from "@hydrophobefireman/kit/icons";
+import {useMedia} from "@hydrophobefireman/kit/hooks";
+import {Input} from "@hydrophobefireman/kit/input";
 import {Modal} from "@hydrophobefireman/kit/modal";
 import {Select} from "@hydrophobefireman/kit/select";
-import {useCallback, useRef, useState} from "@hydrophobefireman/ui-lib";
-import {Skeleton} from "@kit/skeleton";
-
-import {ObjectView} from "../FilePreview";
-import {Paginate} from "../Paginate";
+import {$Iterator, _collectors} from "@hydrophobefireman/lazy";
 import {
-  buttonWrapperCls,
-  gridElLoader,
-  gridRoot,
-  viewerControlButton,
-} from "./file-list-renderer.style";
-import {FileRenderer} from "./file-renderer";
-import {useFileListSelection} from "./use-file-list-selection";
+  Renderable,
+  useMemo,
+  useReducer,
+  useState,
+} from "@hydrophobefireman/ui-lib";
 
-const renderCountOptions = [{value: 10}, {value: 15}, {value: 20}, {value: 50}];
+import {FileViewer} from "../FileViewer";
+import {Paginate} from "../Paginate/Paginate";
+import {GridItem} from "./ViewModes/GridItem";
+import {ListItem} from "./ViewModes/ListItem";
+import {
+  buttonWrapperClass,
+  fileRenderGrid,
+  fileSelectedActionBox,
+} from "./file-renderer.style";
+import {SORT_FUNCTIONS, SORT_OPTIONS, SortFns} from "./sort";
+import {useFileSelection} from "./use-file-selections";
+import {useFilteredFiles} from "./use-filtered-files";
 
-export function FileListRenderer({
-  files,
-  fetchResource,
-}: {
-  files: FileListResponse;
-  fetchResource(): void;
-}) {
-  const [user] = useAuthState();
-  const accKey = useSharedStateValue(accountKeyStore);
-  const {
-    clearSelection,
-    delegateClick,
-    selectedIndices,
-    file: {selectedFile},
-    closeFile,
-    openNextFile,
-    openPreviousFile,
-  } = useFileListSelection(files);
-  const batchDownload = useBatchDownload();
-  function downloadSingleFile(e: JSX.TargetedMouseEvent<HTMLButtonElement>) {
-    e.stopPropagation();
-    return batchDownload([files.objects[+e.currentTarget.dataset.index]]);
-  }
-  const render = useCallback(
-    (obj: FileListResponse["objects"][0], i: number) => (
-      <FileRenderer
-        download={downloadSingleFile}
-        accKey={accKey}
-        fetchResource={fetchResource}
-        index={i}
-        obj={obj}
-        delegate={delegateClick}
-        isSelected={selectedIndices[i]}
-      />
-    ),
-    [selectedIndices]
+const {ARRAY_COLLECTOR} = _collectors;
+export function FileListRenderer() {
+  const {fileList, fetchFiles} = useFileList();
+  useFetchFileSignal(() => fetchFiles());
+  const {filteredFiles, query, setQuery} = useFilteredFiles(fileList);
+  const [_sort, setValue] = useLocalState<string | number>(
+    "config::sort",
+    "a-z"
   );
-  const boxRef = useRef<HTMLDivElement>();
-  const menuRef = useRef<HTMLElement>();
-  const modalRef = useRef<HTMLDivElement>();
-  useClickAway((e) => {
-    const p = getEventPath(e);
-    if (p.includes(modalRef.current) || p.includes(menuRef.current)) return;
-    clearSelection();
-  }, boxRef.current);
-
-  const [listState, setListState] = useState<"delete" | "deleting" | "idle">(
-    "idle"
+  const [displayMode, setDisplayMode] = useLocalState<"list" | "grid">(
+    "config::display-mode",
+    "grid"
   );
-  const {show} = useAlerts();
-
-  const [renderCount, setRenderCount] = useState<10 | 15 | 20 | 50>(10);
-  if (!files) {
-    return (
-      <div style={{gap: "10px"}} class={gridRoot}>
-        {Array.from({length: 5}).map(() => (
-          <Skeleton>
-            <div style={{height: "100px"}} class={gridElLoader} />
-          </Skeleton>
-        ))}
-      </div>
-    );
-  }
-
-  function handleDelete() {
-    setListState("delete");
-  }
-
-  function confDelete() {
-    const toDelete = Object.keys(selectedIndices).map(
-      (x) => files.objects[x as any as number].key
-    );
-
-    setListState("deleting");
-    deleteFile(user.user, toDelete).result.then(({data, error}) => {
-      setListState("idle");
-      clearSelection();
-      if (error) {
-        show({
-          content: "Could not delete files",
-          type: "error",
-        });
-      }
-
-      fetchResource();
-    });
-  }
-  function download() {
-    const toDownload = Object.keys(selectedIndices).map(
-      (x) => selectedIndices[x] && files.objects[x as any as number]
-    );
-    batchDownload(toDownload);
-  }
-  const selectedIndiceValues = Object.values(selectedIndices);
-  const hasSelections = selectedIndiceValues.some(Boolean);
+  const sort: SortFns = _sort as any;
   return (
-    <>
-      <Modal
-        onClickOutside={closeFile}
-        onEscape={closeFile}
-        active={!!selectedFile}
-        class={css({
-          //@ts-ignore
-          "--kit-modal-min-width": "95vw",
-          minHeight: "90vh",
-        })}
-      >
-        {selectedFile && (
-          <Box
-            horizontal="center"
-            class={css({padding: "2rem", height: "100%"})}
+    <div class={css({maxWidth: "1200px", margin: "auto"})}>
+      <Box horizontal="center" class={css({marginTop: "2rem"})}>
+        <Input
+          variant="material"
+          value={query}
+          setValue={setQuery}
+          label="search"
+        />
+      </Box>
+      <Box>
+        <Box horizontal="right" class={css({width: "95%"})}>
+          <Select
+            buttonClass={css({width: "7rem"})}
+            dropdownClass={css({textAlign: "center"})}
+            value={displayMode}
+            setValue={setDisplayMode as any}
+            label="Sort"
+            options={[{value: "grid"}, {value: "list"}]}
+          />
+
+          <Select
+            buttonClass={css({width: "7rem"})}
+            dropdownClass={css({textAlign: "center"})}
+            value={sort}
+            setValue={setValue}
+            label="Sort"
+            options={SORT_OPTIONS}
+          />
+        </Box>
+        <FielList files={filteredFiles} sort={sort} displayMode={displayMode} />
+      </Box>
+    </div>
+  );
+}
+
+function FielList({
+  files,
+  sort,
+  displayMode,
+}: {
+  files: FileMetadata[];
+  sort: SortFns;
+  displayMode: "list" | "grid";
+}) {
+  const sortedFiles = useMemo(
+    () => files.sort(SORT_FUNCTIONS[sort]),
+    [files, sort]
+  );
+  const [loading, setLoading] = useState(false);
+  const {fetchFiles} = useFileList();
+
+  const [openFileState, setState] = useReducer(
+    (curr, newVal: any) => {
+      return {...curr, ...newVal};
+    },
+    {isOpen: false, currentIndex: -1}
+  );
+  function openFile(f: FileMetadata) {
+    setState({isOpen: true, currentIndex: sortedFiles.indexOf(f)});
+  }
+
+  const {handleFileClick, selectedFiles, gridRef, clearSelectedFiles} =
+    useFileSelection(sortedFiles, openFile);
+  const [user] = useAuthState();
+  const [keys] = useAccountKeys();
+  function handleDownload() {
+    new $Iterator(selectedFiles.values())
+      .map((f) => new FileDownloadTask(f, keys, downloadManager))
+      .forEach((f) => downloadManager.addDownload(f));
+    //  we start downloading now let the user do whatever else they want
+    // except delete the file
+    // downloadManager ///
+
+    clearSelectedFiles();
+  }
+
+  const {persist} = useAlerts();
+  const [isDeleting, setDeleting] = useState(false);
+  async function handleDelete(e: JSX.TargetedMouseEvent<HTMLButtonElement>) {
+    if (loading) return;
+    setLoading(true);
+    const files = new $Iterator(selectedFiles.values());
+    const {result} = deleteFiles(
+      user.user,
+      files.map((f) => f.key).collect(ARRAY_COLLECTOR)
+    );
+    const {error} = await result;
+    if (error) {
+      setLoading(false);
+      persist({
+        content: error,
+        type: "error",
+        onActionClick: () => handleDelete(e),
+      });
+      return;
+    }
+    await fetchFiles(true);
+    setDeleting(false);
+    clearSelectedFiles();
+    setLoading(false);
+  }
+  const isWideScreen = useMedia.useMinWidth(600);
+  const closeModal = () => setState({isOpen: false, currentIndex: -1});
+  return (
+    <div class={css({width: "100%", marginTop: "2rem"})}>
+      {openFileState.isOpen && (
+        <Modal
+          onEscape={closeModal}
+          onClickOutside={closeModal}
+          active
+          class={css({
+            pseudo: {
+              ".kit-modal": {width: "80vw", maxWidth: "900px", height: "90vh"},
+            },
+          } as any)}
+        >
+          <FileViewer
+            file={files[openFileState.currentIndex]}
+            next={() =>
+              setState({currentIndex: openFileState.currentIndex + 1})
+            }
+            previous={() =>
+              setState({currentIndex: openFileState.currentIndex - 1})
+            }
+          />
+        </Modal>
+      )}
+      <Modal active={isDeleting}>
+        <Modal.Body>
+          <div
+            class={css({
+              width: "100%",
+              wordBreak: "break-word",
+            })}
           >
-            <Modal.Title
-              class={css({
-                margin: "0px",
-                maxWidth: "80%",
-                overflow: "hidden",
-                textOverflow: "clip",
-              })}
-            >
-              {selectedFile.customMetadata.upload.name}
-            </Modal.Title>
-            <Box flex={1} class={css({position: "relative", width: "100%"})}>
-              <ObjectView
-                onBack={closeFile}
-                accKey={accKey}
-                ct={selectedFile.httpMetadata.contentType}
-                meta={selectedFile.customMetadata.upload}
-                url={getFileFromKeyRoute(selectedFile.key)}
-              >
-                <Box row={true}>
-                  <TextButton
-                    mode="secondary"
-                    variant="shadow"
-                    prefix={<ChevronLeftIcon />}
-                    class={viewerControlButton}
-                    onClick={openPreviousFile}
-                  >
-                    Prev
-                  </TextButton>
-                  <TextButton
-                    mode="secondary"
-                    variant="shadow"
-                    suffix={
-                      <ChevronLeftIcon
-                        class={css({transform: "rotate(180deg)"})}
-                      />
-                    }
-                    class={viewerControlButton}
-                    onClick={openNextFile}
-                  >
-                    Next
-                  </TextButton>
-                </Box>
-              </ObjectView>
-            </Box>
-          </Box>
-        )}
-      </Modal>
-      <Modal active={hasSelections && listState === "delete"}>
-        <div ref={modalRef}>
-          <Modal.Body>
-            <Modal.Title>Confirm delete</Modal.Title>
-            <Modal.Body>
-              Are you sure you want to delete {selectedIndiceValues.length}{" "}
-              items?
-            </Modal.Body>
-          </Modal.Body>
-          <Modal.Actions>
-            <Modal.Action onClick={confDelete}>Delete</Modal.Action>
-            <Modal.Action
-              onClick={() => {
-                clearSelection();
-                setListState("idle");
-              }}
-            >
-              Cancel
-            </Modal.Action>
-          </Modal.Actions>
-        </div>
+            are you sure you want to delete {selectedFiles.size}{" "}
+            {selectedFiles.size === 1 ? "file" : "files"}?
+          </div>
+        </Modal.Body>
+        <Modal.Actions>
+          <Modal.Action onClick={handleDelete}>
+            <span class={css({textTransform: "lowercase"})}>
+              {loading ? <SpinnerIcon /> : "yes"}
+            </span>
+          </Modal.Action>
+          <Modal.Action onClick={() => setDeleting(false)}>
+            <span class={css({textTransform: "lowercase"})}>cancel</span>
+          </Modal.Action>
+        </Modal.Actions>
       </Modal>
       <Box
         row
-        ref={menuRef}
         horizontal="right"
-        style={!hasSelections && {pointerEvents: "none"}}
-        class={css({padding: "1rem"})}
+        vertical="center"
+        class={fileSelectedActionBox(selectedFiles?.size > 0)}
       >
         <TextButton
-          tabIndex={hasSelections ? 0 : -1}
-          onClick={handleDelete}
-          style={!hasSelections && {opacity: 0}}
-          class={css({transition: "var(--kit-transition)", margin: ".5rem"})}
+          disabled={loading}
+          mode="success"
           variant="shadow"
-          mode="error"
+          onClick={handleDownload}
         >
-          Delete
+          download
         </TextButton>
         <TextButton
-          tabIndex={hasSelections ? 0 : -1}
-          onClick={download}
-          style={!hasSelections && {opacity: 0}}
-          class={css({transition: "var(--kit-transition)", margin: ".5rem"})}
+          disabled={loading}
+          mode="error"
           variant="shadow"
-          mode="success"
+          onClick={() => setDeleting(true)}
         >
-          Download
+          delete
         </TextButton>
       </Box>
-      <Box>
-        <Select
-          label="Show"
-          options={renderCountOptions}
-          setValue={(x) => setRenderCount(+x as any)}
-          value={renderCount}
-        />
-      </Box>
-      <div style={listState === "deleting" && {display: "none"}} ref={boxRef}>
+      <div ref={gridRef} class={css({width: "100%"})}>
         <Paginate
+          atOnce={10}
+          buttonWrapperClass={buttonWrapperClass}
           dualButtons
-          buttonClass="kit-button kit-button-secondary"
-          buttonWrapperClass={buttonWrapperCls}
-          listParentClass={gridRoot}
-          atOnce={renderCount}
-          items={files.objects}
-          render={render}
-          
-          nextItemCount={10}
-          nextItemsClass={css({display: "none"})}
+          items={sortedFiles}
+          listBoxClass={
+            displayMode === "grid"
+              ? fileRenderGrid
+              : css({display: "flex", flexDirection: "column", gap: "1rem"})
+          }
+          render={
+            displayMode === "grid"
+              ? createGridRenderer(
+                  selectedFiles,
+                  handleFileClick,
+                  keys,
+                  isWideScreen
+                )
+              : createListRenderer(
+                  selectedFiles,
+                  handleFileClick,
+                  keys,
+                  isWideScreen
+                )
+          }
         />
       </div>
-    </>
+    </div>
   );
 }
+
+interface CreatePaginationRenderer {
+  (
+    selectedFiles: Set<FileMetadata>,
+    handleFileClick: Function,
+    keys: string,
+    isWideScreen: boolean
+  ): (item: FileMetadata, i: number) => Renderable;
+}
+
+const createListRenderer: CreatePaginationRenderer = function (
+  selectedFiles,
+  handleFileClick,
+  keys,
+  isWideScreen
+) {
+  return (f, i) => (
+    <ListItem
+      file={f}
+      handleFileClick={handleFileClick}
+      isWideScreen={isWideScreen}
+      i={i}
+      keys={keys}
+      selectedFiles={selectedFiles}
+    />
+  );
+};
+
+const createGridRenderer: CreatePaginationRenderer = function (
+  selectedFiles,
+  handleFileClick,
+  keys,
+  isWideScreen
+) {
+  return (f, i) => (
+    <GridItem
+      file={f}
+      handleFileClick={handleFileClick}
+      isWideScreen={isWideScreen}
+      i={i}
+      keys={keys}
+      selectedFiles={selectedFiles}
+    />
+  );
+};

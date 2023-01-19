@@ -1,14 +1,13 @@
 import {set} from "statedrive";
+import {
+  initialAuthCheckRoute,
+  loginRoute,
+  refreshTokenRoute,
+} from "~/handlers/routes";
+import {accountKeyStore} from "~/store/account-key-store";
+import {User} from "~/types/user";
 
-import {User} from "@/api-types/user";
-import {previewCache} from "@/hooks/use-file-decrypt";
-import {accountKeyStore} from "@/store/account-key-store";
-import {fileMetaStore} from "@/store/file-meta-data-store";
-import {uploadJobStore} from "@/store/upload-job-store";
 import {Bridge, clear} from "@hydrophobefireman/flask-jwt-jskit";
-import {redirect} from "@hydrophobefireman/ui-lib";
-
-import {initialAuthCheckRoute, loginRoute, refreshTokenRoute} from "./routes";
 
 const client = new Bridge<User>(null);
 
@@ -19,13 +18,11 @@ client.setRoutes({
   initialAuthCheckRoute,
 });
 client.onLogout(async () => {
-  set(fileMetaStore, null);
-  set(uploadJobStore, null);
   set(accountKeyStore, null);
   sessionStorage.clear();
-  previewCache.clear();
   await clear();
-  redirect("/");
+  document.body.textContent = "";
+  location.href = "/";
 });
 
 const {useAuthState, useIsLoggedIn} = client.getHooks();

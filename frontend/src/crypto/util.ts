@@ -34,5 +34,5 @@ export async function generateKey(
 
 export interface EncData {
   encryptedBuf: ArrayBuffer;
-  meta: string;
+  meta: object;
 }

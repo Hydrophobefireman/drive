@@ -1,54 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Drive</title>
-    <meta name="description" content="Storage App" />
-    <base href="/" />
-    <link rel="preconnect" href="https://icons.api.hpfm.dev" />
-    <%= htmlWebpackPlugin.options.css %>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Drive</title>
+  <meta name="description" content="Encrypted storage app">
+  <base href="/" />
+  <%= htmlWebpackPlugin.options.css %>
     <!-- 
       You can use this html file to add your own fonts, 
       a best practice usage of font loading has been added for you.
     -->
     <link rel="preconnect" href="https://fonts.hpfm.dev" crossorigin />
+    <script data-js="touch-intent-css-fix">/iPhone|iPod|iPad/.test(navigator.platform) && (document.head.appendChild(document.createElement("style")).innerText = "*{cursor:pointer}")</script>
+</head>
 
-    <script data-js="touch-intent-css-fix">
-      /iPhone|iPod|iPad/.test(navigator.platform) &&
-        (document.head.appendChild(document.createElement("style")).innerText =
-          "*{cursor:pointer}");
-    </script>
-  </head>
-  <body style="overflow-x: hidden">
-    <template is="custom" custom-element="loading-spinner"
-      ><style>
-        .spinner {
-          margin: auto;
-          height: 50px;
-          width: 50px;
-          border-radius: 50%;
-          animation: rotate 0.8s infinite linear;
-          border: 6px solid var(--spinner-color, var(--kit-theme-fg));
-          border-right-color: var(--spinner-color, var(--kit-theme-fg));
-          border-bottom-color: var(--spinner-color, var(--kit-theme-fg));
-          border-left-color: transparent;
-          transition: 0.3s linear;
-          /* box-sizing: border-box; */
-        }
-        @keyframes rotate {
-          from {
-            transform: rotate(0);
-          }
-          to {
-            transform: rotate(360deg);
-          }
-        }
-      </style>
-      <div class="spinner"></div
-    ></template>
-    <div id="app-mount">
-      <noscript>This App uses JavaScript...</noscript>
-    </div>
-  </body>
+<body>
+
+  <div id="app-mount">
+
+    <noscript>This App uses JavaScript...</noscript>
+  </div>
+</body>
+
 </html>

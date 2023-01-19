@@ -116,3 +116,4 @@ docs/
 .pnp.*
 build/
 .catom.css
+.s3

@@ -1,53 +1,42 @@
-import {useSharedState} from "statedrive";
+import {FileListRenderer} from "~/components/FileListRenderer";
+import {GetAccKey} from "~/components/GetAccKey";
+import {Nav} from "~/components/Nav";
+import {ProgressInfo} from "~/components/ProgressInfo";
+import {Uploader} from "~/components/Uploader";
+import {
+  DecryptedFileListProvider,
+  EncryptedFileListProvider,
+} from "~/context/file-list";
+import {useAuthGuard} from "~/hooks/use-auth-guard";
+import {useAccountKeys} from "~/store/account-key-store";
 
-import {FileListResponse} from "@/api-types/files";
-import {FileListRenderer} from "@/components/FileListRenderer";
-import {Filter} from "@/components/FilterFiles";
-import {GetAccKey} from "@/components/GetAccKey";
-import {Nav} from "@/components/Nav";
-import {Search} from "@/components/SearchFiles";
-import {Upload} from "@/components/Upload";
-import {UploadHandler} from "@/components/UploadHandler";
-import {getFileList} from "@/handlers/files";
-import {useAuthGuard} from "@/hooks/use-auth-guard";
-import {accountKeyStore} from "@/store/account-key-store";
-import {fileMetaStore} from "@/store/file-meta-data-store";
-import {useAuthState} from "@/util/bridge";
-import {_util} from "@hydrophobefireman/kit";
-import {useCachingResource} from "@hydrophobefireman/kit/hooks";
-import {useState} from "@hydrophobefireman/ui-lib";
-
-function App({accountKey}: {accountKey: string}) {
-  const [user] = useAuthState();
-  const {resp, fetchResource} = useCachingResource(
-    getFileList,
-    [user?.user],
-    fileMetaStore,
-    [(user && user.user) || null]
-  );
-  const [filtered, setFiltered] = useState<FileListResponse>();
-  const [sorted, setSorted] = useState<FileListResponse>();
-
+function $App() {
   return (
     <>
       <Nav />
-      <Upload />
-      <Search resp={resp} setFiltered={setFiltered} />
-      <Filter
-        files={filtered}
-        setSortedFiles={setSorted}
-        accountKey={accountKey}
-      />
-      <FileListRenderer fetchResource={fetchResource} files={sorted} />
-      <UploadHandler fetchResource={fetchResource} accountKey={accountKey} />
+      <Uploader />
+      <FileListRenderer />
+      <ProgressInfo />
     </>
   );
 }
 
-export default function _App() {
-  const loggedIn = useAuthGuard("/app");
-  const [accKey, setKey] = useSharedState(accountKeyStore);
+function AppRenderer() {
+  const [accKey, setKey] = useAccountKeys();
   if (!accKey) return <GetAccKey setKey={setKey} />;
-  if (!loggedIn) return <></>;
-  return <App accountKey={accKey} />;
+  return (
+    <DecryptedFileListProvider accountKey={accKey}>
+      <$App />
+    </DecryptedFileListProvider>
+  );
+}
+
+export default function App() {
+  const isLoggedIn = useAuthGuard("/app");
+  if (!isLoggedIn) return <></>;
+  return (
+    <EncryptedFileListProvider>
+      <AppRenderer />
+    </EncryptedFileListProvider>
+  );
 }

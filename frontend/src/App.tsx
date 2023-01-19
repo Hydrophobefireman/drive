@@ -1,25 +1,20 @@
 import "@kit/styles";
+import "@kit/css-reset";
+import "~/App.css";
 
-// javascript is supported
-import "./App.css";
-import "./init-spinner";
+import {Router} from "~/_router";
+import {AppLoader} from "~/components/AppLoader";
 
-import { render } from "@hydrophobefireman/ui-lib";
+import {VNode, render} from "@hydrophobefireman/ui-lib";
 
-import { Router } from "./_router";
-import { AppLoader } from "./components/AppLoader";
-
-function App() {
+function App(): VNode {
   return (
     <main>
-      <Router />
+      <AppLoader>
+        <Router />
+      </AppLoader>
     </main>
   );
 }
 
-render(
-  <AppLoader>
-    <App />
-  </AppLoader>,
-  document.getElementById("app-mount")
-);
+render(<App />, document.getElementById("app-mount"));

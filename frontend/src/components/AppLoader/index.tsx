@@ -1,15 +1,14 @@
 import {set} from "statedrive";
-
+import {DelayedRender} from "~/components/DelayedRender";
 import {
   ACCOUNT_SESSION_STORAGE_KEY,
   accountKeyStore,
-} from "@/store/account-key-store";
-import {client} from "@/util/bridge";
-import {get} from "@hydrophobefireman/flask-jwt-jskit";
-import {useMount} from "@hydrophobefireman/kit/hooks";
-import {useState} from "@hydrophobefireman/ui-lib";
+} from "~/store/account-key-store";
+import {client} from "~/util/bridge";
 
-import {DelayedRender} from "../DelayedRender";
+import {get} from "@hydrophobefireman/flask-jwt-jskit";
+import {useState} from "@hydrophobefireman/ui-lib";
+import {useMount} from "@kit/hooks";
 
 export function AppLoader({children}: {children?: any}) {
   const [synced, setSynced] = useState(false);

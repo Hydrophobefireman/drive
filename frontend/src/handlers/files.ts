@@ -1,10 +1,7 @@
-import {FileListResponse} from "@/api-types/files";
-import {requests} from "@/util/bridge";
-import {
-  deleteFileRoute,
-  getFileFromKeyRoute,
-  listFilesRoute,
-} from "@/util/routes";
+import {FileListResponse} from "~/types/files";
+import {requests} from "~/util/bridge";
+
+import {batchDeleteRoute, listFilesRoute} from "./routes";
 
 export function getFileList(u: string) {
   const {controller, headers, result} = requests.get<FileListResponse>(
@@ -18,21 +15,23 @@ export function getFileList(u: string) {
       const obj = data.objects.map((x) => {
         return {
           ...x,
+          uploaded: new Date(x.uploaded),
+          previewMetadata: {
+            upload: x.previewMetadata?.upload
+              ? JSON.parse(x.previewMetadata.upload as unknown as string)
+              : {},
+          },
           customMetadata: {
             upload: JSON.parse(x.customMetadata.upload as unknown as string),
           },
         };
       });
       data.objects = obj;
+      // .concat(obj).concat(obj).concat(obj).concat(obj)
       return {data, error};
     }),
   };
 }
-
-export function deleteFile(u: string, keys: string[]) {
-  return requests.postJSON(deleteFileRoute(u), keys);
-}
-
-export function headFile(key: string) {
-  return requests.head(getFileFromKeyRoute(key));
+export function deleteFiles(u: string, files: string[]) {
+  return requests.postJSON(batchDeleteRoute(u), files);
 }

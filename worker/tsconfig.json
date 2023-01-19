@@ -1,5 +1,8 @@
 {
   "compilerOptions": {
+    "paths": {
+      "~/*": ["./src/*"]
+    },
     /* Visit https://aka.ms/tsconfig.json to read more about this file */
 
     /* Projects */

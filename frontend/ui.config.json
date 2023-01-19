@@ -5,5 +5,5 @@
   "outputDir": "build",
   "staticDir": "build_static",
   "staticFilePrefix": "_ui",
-  "fonts": [{ "href": "https://fonts.hpfm.dev/poppins.css" }]
+  "fonts": [{"href": "https://fonts.hpfm.dev/poppins.css"}]
 }

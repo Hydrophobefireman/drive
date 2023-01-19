@@ -1,18 +1,18 @@
-name = "r2"
+name = "r2-dec-22"
 main = "src/index.ts"
-compatibility_date = "2022-05-18"
+compatibility_date = "2022-11-30"
 
 kv_namespaces = [
-    { binding = "AUTH", id = "5146104b321949678119c9e09bc8e701", preview_id = "5146104b321949678119c9e09bc8e701" },
+    { binding = "AUTH", id = "29142e1096a04753b042d4de4c7fb27d", preview_id = "29142e1096a04753b042d4de4c7fb27d" },
 ]
 
 
 [[r2_buckets]]
 binding = "B_GALLERY"
-bucket_name = "gallery-v0"
-preview_bucket_name = "gallery-v0"
+bucket_name = "drive-1"
+preview_bucket_name = "drive-1"
 
 [[r2_buckets]]
 binding = "B_PREVIEWS"
-bucket_name = "previews"
-preview_bucket_name = "previews"
+bucket_name = "previews-1"
+preview_bucket_name = "previews-1"

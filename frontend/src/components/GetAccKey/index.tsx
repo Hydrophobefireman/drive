@@ -1,13 +1,14 @@
 import {css} from "catom";
+import {ACCOUNT_SESSION_STORAGE_KEY} from "~/store/account-key-store";
+import {client} from "~/util/bridge";
 
-import {ACCOUNT_SESSION_STORAGE_KEY} from "@/store/account-key-store";
-import {client} from "@/util/bridge";
 import {set} from "@hydrophobefireman/flask-jwt-jskit";
-import {TextButton} from "@hydrophobefireman/kit/button";
-import {Checkbox, Input, useCheckbox} from "@hydrophobefireman/kit/input";
-import {Modal} from "@hydrophobefireman/kit/modal";
-import {Text} from "@hydrophobefireman/kit/text";
 import {useState} from "@hydrophobefireman/ui-lib";
+import {TextButton} from "@kit/button";
+import {Box} from "@kit/container";
+import {Checkbox, Input, useCheckbox} from "@kit/input";
+import {Modal} from "@kit/modal";
+import {Text} from "@kit/text";
 
 import {Form} from "../Form";
 
@@ -19,13 +20,11 @@ export function GetAccKey({setKey}: {setKey(k: string): void}) {
     <Modal active={true}>
       <Modal.Body>
         <Modal.Title>Enter Account Key</Modal.Title>
-        <Text>
+        <Text class={css({marginBottom: ".5rem"})}>
           Your account key is needed to encrypt and decrypt your files for{" "}
-          {
-            <span class={css({textDecoration: "underline"})}>
-              {client.getState()?.user ?? "your account"}
-            </span>
-          }
+          <span class={css({textDecoration: "underline"})}>
+            {client.getState()?.user ?? "your account"}
+          </span>
         </Text>
         <Form
           onSubmit={() => {
@@ -50,17 +49,39 @@ export function GetAccKey({setKey}: {setKey(k: string): void}) {
           <Checkbox onCheck={toggle} checked={checked}>
             Save my key
           </Checkbox>
-          <TextButton
-            class={css({
-              marginLeft: "auto",
-              marginRight: "auto",
-              marginTop: ".5rem",
-            })}
-            variant="shadow"
-            mode="secondary"
-          >
-            Submit
-          </TextButton>
+          <Box row>
+            <TextButton
+              onClick={() => {
+                client.logout();
+              }}
+              type="button"
+              class={css({
+                marginLeft: "auto",
+                marginRight: "auto",
+                marginTop: ".5rem",
+                pseudo: {
+                  ".kit-flex.kit-button-alert": {
+                    color: "black",
+                  },
+                },
+              })}
+              variant="shadow"
+              mode="alert"
+            >
+              Log out
+            </TextButton>
+            <TextButton
+              class={css({
+                marginLeft: "auto",
+                marginRight: "auto",
+                marginTop: ".5rem",
+              })}
+              variant="shadow"
+              mode="secondary"
+            >
+              Submit
+            </TextButton>
+          </Box>
         </Form>
       </Modal.Body>
     </Modal>

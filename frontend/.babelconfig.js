@@ -2,7 +2,6 @@ const plugins = [
   "catom/babelPlugin",
   "@babel/plugin-proposal-class-properties",
   "@babel/plugin-syntax-dynamic-import",
-
   [
     "@babel/plugin-transform-react-jsx",
     {
@@ -26,12 +25,12 @@ module.exports = {
           "@babel/preset-env",
           {
             corejs: 3,
-            targets: ["last 2 versions", "not IE 11"],
+            targets: [">0.5%", "last 1 version", "not dead"],
             useBuiltIns: "usage",
           },
         ],
       ],
-      plugins: [...plugins, ["@babel/plugin-transform-runtime", { corejs: 3 }]],
+      plugins: [...plugins, ["@babel/plugin-transform-runtime", {corejs: 3}]],
     },
   },
 };

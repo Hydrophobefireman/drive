@@ -9,14 +9,12 @@ const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const {autoPrefixCSS} = require("catom/dist/css");
 const babel = require("./.babelconfig");
 const uiConfig = require("./ui.config.json");
-const {browserslistToTargets, transform} = require("@parcel/css");
-const browserslist = require("browserslist");
 const mode = process.env.NODE_ENV;
 const isProd = mode === "production";
 const {outputDir, staticFilePrefix, inlineCSS, enableCatom, fonts} = uiConfig;
-const browserslistConfig = browserslistToTargets(
-  browserslist("last 2 versions")
-);
+// const browserslistConfig = browserslistToTargets(
+//   browserslist("last 2 versions")
+// );
 function prodOrDev(a, b) {
   return isProd ? a : b;
 }
@@ -48,22 +46,22 @@ const contentLoaderOptions = {
     ? [{loader: "url-loader", options: {fallback: "file-loader"}}]
     : [{loader: "file-loader"}],
 };
-/**
- *
- * @param {string} css
- */
-function parcelHandleCss(css) {
-  const {code} = transform({
-    code: Buffer.from(css),
-    filename: "1.css",
-    drafts: {customMedia: true, nesting: true},
-    minify: true,
-    targets: browserslistConfig,
-    sourceMap: false,
-  });
+// /**
+//  *
+//  * @param {string} css
+//  */
+// function parcelHandleCss(css) {
+//   const {code} = transform({
+//     code: Buffer.from(css),
+//     filename: "1.css",
+//     drafts: {customMedia: true, nesting: true},
+//     minify: true,
+//     targets: browserslistConfig,
+//     sourceMap: false,
+//   });
 
-  return Promise.resolve({css: code.toString()});
-}
+//   return Promise.resolve({css: code.toString()});
+// }
 
 function getEnvObject(isLegacy) {
   const prod = !isLegacy;
@@ -115,7 +113,7 @@ function getCfg(isLegacy) {
     },
     resolve: {
       extensions: [".ts", ".tsx", ".js", ".json"],
-      alias: {"@": srcPath("src"), "@kit": "@hydrophobefireman/kit"},
+      alias: {"~": srcPath("src"), "@kit": "@hydrophobefireman/kit"},
     },
     mode,
     optimization: {
@@ -124,8 +122,8 @@ function getCfg(isLegacy) {
         [
           new TerserWebpackPlugin({parallel: true}),
           new CssMinimizerPlugin({
-            minify: CssMinimizerPlugin.parcelCssMinify,
-            parallel: Math.floor(require("os").cpus()?.length / 2) || 1,
+            minify: CssMinimizerPlugin.lightningCssMinify,
+            parallel: require("os").cpus()?.length || 1,
           }),
         ],
         []
@@ -179,24 +177,16 @@ function getCfg(isLegacy) {
           !1
         ),
       }),
-      // isProd &&
-      //   new WorkboxPlugin.GenerateSW({
-      //     // these options encourage the ServiceWorkers to get in there fast
-      //     // and not allow any straggling "old" SWs to hang around
-      //     clientsClaim: true,
-      //     skipWaiting: true,
-      //     importScripts: ["/encrypted-image-helper.js"],
-      //     navigateFallback: "/index.html",
-      //     exclude: [/^\/api\//],
-      //   }),
       new MiniCssExtractPlugin({
         filename: `${staticFilePrefix}/main-[contenthash].css`,
       }),
       isProd && inlineCSS && new HTMLInlineCSSWebpackPlugin({}),
-      new WebpackModuleNoModulePlugin({
-        mode: isLegacy ? "legacy" : "modern",
-        fonts,
-      }),
+      new WebpackModuleNoModulePlugin(
+        Object.assign(
+          {mode: isLegacy ? "legacy" : "modern", fonts},
+          prodOrDev({outputMode: "minimal"}, {})
+        )
+      ),
     ].filter(Boolean),
   };
 }

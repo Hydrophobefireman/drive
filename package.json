@@ -4,19 +4,19 @@
   "description": "Drive monorepo",
   "main": "index.js",
   "scripts": {
-    "dev": "concurrently 'cd frontend && npm run start' 'cd worker && wrangler dev'",
+    "dev": "concurrently 'cd frontend && npm run dev' 'cd worker && wrangler dev'",
     "prepare": "husky install"
   },
   "author": "Hydrophobefireman",
   "license": "MIT",
   "private": true,
   "dependencies": {
-    "husky": "^8.0.1"
+    "husky": "^8.0.3"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^3.11.0",
-    "concurrently": "^7.2.1",
-    "typescript": "^4.7.3",
-    "wrangler": "^2.0.9"
+    "@cloudflare/workers-types": "^4.20221111.1",
+    "concurrently": "^7.6.0",
+    "typescript": "^4.9.4",
+    "wrangler": "^2.7.1"
   }
 }

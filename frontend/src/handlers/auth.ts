@@ -1,13 +1,12 @@
-import {User} from "@/api-types/user";
-import {requests} from "@/util/bridge";
-import {registerRoute, revokeTokenRoute} from "@/util/routes";
+import {User} from "~/types/user";
+import {requests} from "~/util/bridge";
 
-export function register(username: string) {
+import {registerRoute, revokeTokenRoute} from "./routes";
+
+export function register(user: string, accountKey: string) {
   return requests.postJSON<{
     user_data: {user: User; accountKey: string; kv: string};
-  }>(registerRoute, {
-    user: username,
-  });
+  }>(registerRoute, {user, accountKey});
 }
 
 export function revokeIntegrityToken() {

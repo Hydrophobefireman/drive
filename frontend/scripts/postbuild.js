@@ -4,7 +4,6 @@ const {
   lstatSync,
   mkdirSync,
   existsSync,
-  writeFileSync,
 } = require("fs");
 const {join} = require("path");
 const config = require("../ui.config.json");
@@ -26,5 +25,5 @@ function copyFolderSync(from, to) {
     }
   });
 }
-writeFileSync(join(outputDir, "check-sw"), String(+new Date()));
+
 copyFolderSync(BUILD_STATIC, outputDir);

@@ -1,0 +1,62 @@
+diff --git a/worker2/src/auth/list-files.ts b/worker2/src/auth/list-files.ts
+index 4a189ff..d4acab8 100644
+--- a/worker2/src/auth/list-files.ts
++++ b/worker2/src/auth/list-files.ts
+@@ -1,5 +1,13 @@
+ import {Context} from "hono";
+-import {cacheKey} from "~/util/cache-key";
++import {CONFIG} from "~/util/bucket-config";
++
++import {
++  HeadObjectCommand,
++  ListObjectsCommand,
++  ListObjectsCommandInput,
++  ListObjectsCommandOutput,
++  S3Client,
++} from "@aws-sdk/client-s3";
+ 
+ import {Env} from "../types";
+ import {json} from "../util/json";
+@@ -11,7 +19,7 @@ async function listAll(options: R2ListOptions, bucket: R2Bucket) {
+   const ret = await bucket.list(opt);
+   let c = 1;
+   let {cursor, truncated} = ret;
+-  if (truncated) {
++  while (truncated) {
+     c++;
+     const opt = {...options, cursor};
+     const res = await bucket.list(opt);
+@@ -19,7 +27,6 @@ async function listAll(options: R2ListOptions, bucket: R2Bucket) {
+     cursor = res.cursor;
+     truncated = res.truncated;
+   }
+-  console.log(c);
+   return ret;
+ }
+ function objectsByKeys(obj: R2Object[]): Record<string, R2Object> {
+@@ -38,13 +45,16 @@ interface ObjectInfo {
+   range?: R2Range | undefined;
+   previewMetadata?: Record<string, string> | null;
+ }
+-export async function listUserFiles(c: Context<"user", {Bindings: Env}>) {
++export async function listUserFiles(
++  c: Context<"user", {Bindings: Env; Variables: {r2: S3Client}}>
++) {
+   // const maybe = await cache.match(cacheKey(c));
+   // if (maybe) {
+   //   console.log(`[cache] hit for ${cacheKey(c)}`);
+   //   return new Response(maybe.body);
+   // }
+   const {user} = c.req.param();
++  const r2 = c.get("r2");
+   if (!user) return json({error: "Missing username"}, 400);
+ 
+   const {B_GALLERY, B_PREVIEWS} = c.env;
+@@ -53,7 +63,6 @@ export async function listUserFiles(c: Context<"user", {Bindings: Env}>) {
+     prefix: `${user}/`,
+     include: ["customMetadata", "httpMetadata"],
+   } as any;
+-
+   const previewOpt: R2ListOptions = {
+     prefix: `${user}/`,
+     include: ["customMetadata"],

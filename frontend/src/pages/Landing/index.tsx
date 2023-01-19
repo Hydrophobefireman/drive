@@ -1,26 +1,12 @@
-import {css} from "catom";
+import {useIsLoggedIn} from "~/util/bridge";
 
-import {Auth} from "@/components/Auth";
-import {Box} from "@kit/container";
-import {Text} from "@kit/text";
+import {redirect, useEffect} from "@hydrophobefireman/ui-lib";
 
-/** Exported routes need to be default exports */
 export default function Landing() {
-  return (
-    <Box class={css({marginTop: "2rem"})}>
-      <Text.h1
-        class={css({
-          fontSize: "max(5vw,45px)",
-          fontWeight: "bold",
-          textTransform: "capitalize",
-        })}
-      >
-        Drive
-      </Text.h1>
-      <Text.p class={css({fontSize: "1.25rem"})}>
-        Encrypted Storage Network
-      </Text.p>
-      <Auth />
-    </Box>
-  );
+  const isLoggedIn = useIsLoggedIn();
+  useEffect(() => {
+    if (isLoggedIn) return redirect("/app");
+    return redirect("/auth");
+  }, [isLoggedIn]);
+  return <></>;
 }

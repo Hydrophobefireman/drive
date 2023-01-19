@@ -1,4 +1,5 @@
 import type {Context, Next} from "hono";
+import {Env} from "~/types";
 
 type CORSOptions = {
   origin?: string | symbol;
@@ -21,7 +22,7 @@ export const cors = (options?: CORSOptions) => {
     ...options,
   } as Required<CORSOptions>;
 
-  return async (c: Context, next: Next) => {
+  return async (c: Context<string, {Bindings: Env}>, next: Next) => {
     function set(key: string, value: string) {
       c.res.headers.append(key, value);
     }
