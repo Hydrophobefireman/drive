@@ -49,6 +49,7 @@ export function GridItem({
       role="button"
       data-public-url={publicFileURL(file.key)}
       class={fileRenderItem}
+      data-selected={selectedFiles.has(file)}
       onClick={(e) => handleFileClick(e, file, i)}
     >
       {deleteModal}
