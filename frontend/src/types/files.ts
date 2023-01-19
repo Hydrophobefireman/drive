@@ -52,6 +52,6 @@ export interface FileListResponse {
 
 declare global {
   interface HTMLElement {
-    _nodeContext: any;
+    _nodeContext?: any;
   }
 }
