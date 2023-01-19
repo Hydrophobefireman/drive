@@ -8,6 +8,8 @@ export interface BlurHashHookProps {
   accKey: string;
   meta: FileMetadata;
 }
+const BLURHASH_CACHE = new Map<string, string>();
+
 export function useBlurHashDecode({accKey, meta}: BlurHashHookProps) {
   const [hash, setHash] = useState<string | null>(null);
   const hasBlurHash = Boolean(meta?.previewMetadata?.upload?.hash);
@@ -17,6 +19,9 @@ export function useBlurHashDecode({accKey, meta}: BlurHashHookProps) {
       _util.raf(() => {
         if (!meta?.previewMetadata?.upload?.hash) return null;
         const bhstring = meta.previewMetadata.upload.hash;
+        if (BLURHASH_CACHE.has(bhstring)) {
+          return setHash(BLURHASH_CACHE.get(bhstring));
+        }
         let res: string;
         try {
           const thumbMeta = meta.previewMetadata.upload.mediaMetadata;
@@ -31,6 +36,7 @@ export function useBlurHashDecode({accKey, meta}: BlurHashHookProps) {
           d.data.set(imgData);
           ctx.putImageData(d, 0, 0);
           res = canvas.toDataURL("image/png");
+          BLURHASH_CACHE.set(bhstring, res);
         } catch (e) {
           console.warn(e);
           res = null;
