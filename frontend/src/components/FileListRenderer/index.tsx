@@ -57,6 +57,7 @@ export function FileListRenderer() {
   useEffect(() => {
     _util.raf(() => setSort(sort));
   }, [_sort]);
+  console.log(sort);
   return (
     <div class={css({maxWidth: "1200px", margin: "auto"})}>
       <Box horizontal="center" class={css({marginTop: "2rem"})}>

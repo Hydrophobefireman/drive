@@ -7,6 +7,7 @@ import {PreviewEncryptionMetadata} from "~/types/files";
 import {PreviewInit} from "~/types/preview";
 import {requests} from "~/util/bridge";
 
+import {SpinnerIcon} from "@hydrophobefireman/kit-icons";
 import {useResource} from "@hydrophobefireman/kit/hooks";
 
 import {previewImg} from "./preview.style";
@@ -83,6 +84,23 @@ export function PreviewDecrypt(props: PreviewInit) {
     accKey: props.decryptionKeys,
     meta: props.file,
   });
-  if (needsHash && !blurHash) return <></>;
+
+  if (needsHash && !blurHash)
+    return (
+      <div
+        class={css({
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "100%",
+          position: "absolute",
+          top: "0",
+          left: "0",
+          right: "0",
+        })}
+      >
+        <SpinnerIcon />
+      </div>
+    );
   return <$PreviewDecrypt {...props} blurHash={blurHash} />;
 }

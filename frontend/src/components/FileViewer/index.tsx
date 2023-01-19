@@ -135,8 +135,8 @@ function EncryptedFileViewer({file}: {file: FileMetadata}) {
       onDecryptStart: () => {
         setStatus("DECRYPTING");
       },
-      onError: () => {
-        setStatus("ERROR");
+      onError: (e) => {
+        if (e.error) setStatus("ERROR");
       },
       onResult: (blob) => {
         setStatus("DONE");

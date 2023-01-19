@@ -43,7 +43,6 @@ export function GridItem({
   }, dropdownSiblingRef.current);
 
   const isUnencrypted = file.customMetadata.upload.unencryptedUpload;
-
   return (
     <div
       role="button"

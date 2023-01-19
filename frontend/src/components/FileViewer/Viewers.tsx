@@ -60,7 +60,7 @@ export function LoaderWithPreview({
       </div>
 
       <div class={textCenter} style={{"--p": percent}}>
-        {(percent * 100).toFixed(2)}
+        {(percent * 100).toFixed(2)}%
       </div>
     </ViewerRoot>
   );
