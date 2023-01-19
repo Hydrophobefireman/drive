@@ -31,9 +31,27 @@ export function FileViewer({
   next(): void;
   previous(): void;
 }) {
+  const previewable = ["text", "image", "audio", "video", "pdf"].some((x) =>
+    file.customMetadata.upload.contentType.includes(x)
+  );
   return (
     <div class={css({maxWidth: "900px", height: "90%"})}>
-      <$FileViewer file={file} />
+      {previewable ? (
+        <$FileViewer file={file} />
+      ) : (
+        <div class={previewRoot}>
+          <div class={textCenter}>
+            The requested file <b>{file.customMetadata.upload.name}</b> cannot
+            be shown in this browser
+          </div>
+          <a
+            class={css({textDecoration: "underline"})}
+            href={publicFileURL(file.key)}
+          >
+            File URL
+          </a>
+        </div>
+      )}
       <div class={buttonsRoot}>
         <TextButton
           onClick={previous}
@@ -59,18 +77,19 @@ export function FileViewer({
 }
 
 function FileName({file}: {file: FileMetadata}) {
-  const unEncrypted = !file.customMetadata.upload.unencryptedUpload;
+  const unEncrypted = file.customMetadata.upload.unencryptedUpload;
+  const cls = textCenter;
   if (unEncrypted)
     return (
       <a
         href={publicFileURL(file.key)}
         target="_blank"
-        class={`${textCenter} ${css({textDecoration: "underline"})}`}
+        class={`${cls} ${css({textDecoration: "underline"})}`}
       >
         {file.customMetadata.upload.name}
       </a>
     );
-  return <div class={textCenter}>{file.customMetadata.upload.name}</div>;
+  return <div class={cls}>{file.customMetadata.upload.name}</div>;
 }
 
 function $FileViewer({file}: {file: FileMetadata}) {
