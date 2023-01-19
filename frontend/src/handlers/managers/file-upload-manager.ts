@@ -75,12 +75,12 @@ export class UploadManager extends BaseManager {
       return done;
     };
 
-    new $Iterator(_range(5)).forEach(put);
+    new $Iterator(_range(10)).forEach(put);
 
     // we start sequentially
     // starting is nothing but requesting an upload token (signed url) from the worker
     // so to reduce the pressure on the worker itself,
-    // we chunk the files in groups of 5
+    // we chunk the files in groups of 10
     // generating the signed URL is actually not that expensive but i'll still like doing this instead
     // of firing 100+ requests in case of large uploads
     while (true) {

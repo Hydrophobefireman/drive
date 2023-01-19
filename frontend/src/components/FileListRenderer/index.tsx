@@ -231,7 +231,7 @@ function FielList({
       </Box>
       <div ref={gridRef} class={css({width: "100%"})}>
         <Paginate
-          atOnce={10}
+          atOnce={50}
           buttonWrapperClass={buttonWrapperClass}
           dualButtons
           items={sortedFiles}
