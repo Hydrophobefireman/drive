@@ -55,7 +55,7 @@ export function FileListRenderer() {
   );
   const [sort, setSort] = useState<SortFns>(_sort as any);
   useEffect(() => {
-    _util.raf(() => setSort(sort));
+    _util.raf(() => setSort(_sort));
   }, [_sort]);
   console.log(sort);
   return (
