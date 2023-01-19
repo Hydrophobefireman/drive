@@ -47,7 +47,7 @@ export function FileListRenderer() {
   const {filteredFiles, query, setQuery} = useFilteredFiles(fileList);
   const [_sort, setValue] = useLocalState<string | number>(
     "config::sort",
-    "a-z"
+    "newest"
   );
   const [displayMode, setDisplayMode] = useLocalState<"list" | "grid">(
     "config::display-mode",
