@@ -1,4 +1,5 @@
 import {css} from "catom";
+import {publicFileURL} from "~/handlers/routes";
 import {useCancellableControllerRef} from "~/hooks/use-cancellable-controller";
 import {useAccountKeys} from "~/store/account-key-store";
 import {FileMetadata} from "~/types/files";
@@ -57,6 +58,21 @@ export function FileViewer({
   );
 }
 
+function FileName({file}: {file: FileMetadata}) {
+  const unEncrypted = !file.customMetadata.upload.unencryptedUpload;
+  if (unEncrypted)
+    return (
+      <a
+        href={publicFileURL(file.key)}
+        target="_blank"
+        class={`${textCenter} ${css({textDecoration: "underline"})}`}
+      >
+        {file.customMetadata.upload.name}
+      </a>
+    );
+  return <div class={textCenter}>{file.customMetadata.upload.name}</div>;
+}
+
 function $FileViewer({file}: {file: FileMetadata}) {
   const ref = useCancellableControllerRef();
   const [keys] = useAccountKeys();
@@ -108,7 +124,7 @@ function $FileViewer({file}: {file: FileMetadata}) {
   if (status === "DONE") {
     return (
       <div class={previewRoot}>
-        <div class={textCenter}>{file.customMetadata.upload.name}</div>
+        <FileName file={file} />
         <div
           class={previewContainer}
           style={
@@ -126,7 +142,7 @@ function $FileViewer({file}: {file: FileMetadata}) {
     if (hasPreview) {
       return (
         <div class={previewRoot}>
-          <div class={textCenter}>{file.customMetadata.upload.name}</div>
+          <FileName file={file} />
           <div
             class={previewContainer}
             style={{
@@ -150,7 +166,7 @@ function $FileViewer({file}: {file: FileMetadata}) {
     }
     return (
       <div class={previewRoot}>
-        <div class={textCenter}>{file.customMetadata.upload.name}</div>
+        <FileName file={file} />
         <SpinnerIcon size={"4rem"} />
         <div
           class={css({
