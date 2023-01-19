@@ -34,10 +34,14 @@ export function FileUploadConfigModal() {
       <Modal.Body>
         <div
           class={css({
-            width: "95%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
+            media: {
+              "(min-width:600px)": {
+                width: "95%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              },
+            },
           })}
         >
           <GlobalEncryptionState />

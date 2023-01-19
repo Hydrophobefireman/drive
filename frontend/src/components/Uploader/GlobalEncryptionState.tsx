@@ -2,6 +2,7 @@ import {css} from "catom";
 import {uploadManager} from "~/handlers/managers/file-upload-manager";
 import {useFileUploadPreference} from "~/signals/file-signals";
 
+import {useMedia} from "@hydrophobefireman/kit/hooks";
 import {Box} from "@kit/container";
 import {Switch} from "@kit/input";
 
@@ -14,10 +15,11 @@ export function GlobalEncryptionState() {
     .count();
 
   const label = `encrypting ${encrypting}/${total} files`;
+  const isMobile = useMedia.useMaxWidth("600px");
   return (
     <Box
       vertical="center"
-      horizontal="left"
+      horizontal={isMobile ? "center" : "left"}
       class={css({marginBottom: "1rem"})}
     >
       <Switch
