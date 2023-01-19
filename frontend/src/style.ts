@@ -6,4 +6,5 @@ export const ellipsis = css({
   overflow: "hidden",
   whiteSpace: "nowrap",
   textOverflow: "ellipsis",
+  maxWidth: "100%",
 });

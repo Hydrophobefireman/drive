@@ -34,14 +34,14 @@ function Disclosure() {
         bottom: "0",
         left: "0",
         right: "0",
-        height: "2rem",
+        minHeight: "2rem",
         alignItems: "center",
         justifyContent: "center",
         display: "flex",
       })}
     >
       <Text.p color="kit-shade-6">
-        Looking for the original drive account? Check out the{" "}
+        looking for the original drive account? check out the{" "}
         <a
           class={css({textDecoration: "underline"})}
           target="_blank"

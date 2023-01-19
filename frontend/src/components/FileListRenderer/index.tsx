@@ -170,12 +170,15 @@ function FielList({
           } as any)}
         >
           <FileViewer
+            close={closeModal}
             file={files[openFileState.currentIndex]}
-            next={() =>
-              setState({currentIndex: openFileState.currentIndex + 1})
+            next={
+              openFileState.currentIndex < files.length - 1 &&
+              (() => setState({currentIndex: openFileState.currentIndex + 1}))
             }
-            previous={() =>
-              setState({currentIndex: openFileState.currentIndex - 1})
+            previous={
+              openFileState.currentIndex > 0 &&
+              (() => setState({currentIndex: openFileState.currentIndex - 1}))
             }
           />
         </Modal>

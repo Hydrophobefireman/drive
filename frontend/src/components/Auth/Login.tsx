@@ -52,7 +52,7 @@ export function Login() {
             mode="secondary"
             variant="shadow"
           >
-            Submit
+            submit
           </TextButton>
         </div>
       </Box>
@@ -61,7 +61,7 @@ export function Login() {
           class={css({textDecoration: "underline"})}
           href="/auth?mode=register"
         >
-          Register
+          register
         </A>
       </Box>
     </Form>

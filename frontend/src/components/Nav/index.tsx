@@ -21,7 +21,7 @@ export function Nav() {
   }
   const dropdownParentRef = useRef<HTMLElement>();
   const dropdownSiblingRef = useRef<HTMLButtonElement>();
-  function handleLogout(e: JSX.TargetedMouseEvent<HTMLButtonElement>) {
+  async function handleLogout(e: JSX.TargetedMouseEvent<HTMLButtonElement>) {
     const {
       currentTarget: {
         dataset: {action},
@@ -29,7 +29,7 @@ export function Nav() {
     } = e;
 
     if (action === "logout:all") {
-      revokeIntegrityToken();
+      await revokeIntegrityToken().result;
     }
     client.logout();
   }

@@ -21,6 +21,7 @@ const _navDropdownContainerBasecls = `kit-inline-flex ${css({
   boxShadow: "var(--kit-shadow)",
   gap: ".15rem",
   marginRight: "10px",
+  background: "var(--kit-background)",
 })}`;
 export const navDropdownContainerCls = (isOpen: boolean) =>
   `${_navDropdownContainerBasecls} ${

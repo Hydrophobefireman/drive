@@ -8,36 +8,49 @@ import {decryptionDownloader} from "~/util/downloader";
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
-  SpinnerIcon,
+  XIcon,
 } from "@hydrophobefireman/kit-icons";
 import {TextButton} from "@hydrophobefireman/kit/button";
+import {Box} from "@hydrophobefireman/kit/container";
 import {useEffect, useState} from "@hydrophobefireman/ui-lib";
 
-import {PreviewDecrypt} from "../FileListRenderer/PreviewRenderer/PreviewDecrypt";
 import {PreviewBlob} from "../PreviewBlob";
-import {
-  buttonsRoot,
-  previewContainer,
-  previewRoot,
-  textCenter,
-} from "./file-viewer.style";
+import {PreviewURL} from "../PreviewURL";
+import {LoaderWithPreview, PreviewContainer, UnknownSpinner} from "./Viewers";
+import {buttonsRoot, previewRoot, textCenter} from "./file-viewer.style";
 
 export function FileViewer({
   file,
   next,
   previous,
+  close,
 }: {
   file: FileMetadata;
-  next(): void;
-  previous(): void;
+  next?(): void;
+  previous?(): void;
+  close(): void;
 }) {
+  const fileType = file.customMetadata.upload.contentType;
   const previewable = ["text", "image", "audio", "video", "pdf"].some((x) =>
-    file.customMetadata.upload.contentType.includes(x)
+    fileType.includes(x)
   );
+  const unencryptedUpload = file.customMetadata.upload.unencryptedUpload;
+
   return (
     <div class={css({maxWidth: "900px", height: "90%"})}>
+      <Box horizontal="right">
+        <button onClick={close} class={css({padding: "0.5rem"})}>
+          <XIcon />
+        </button>
+      </Box>
       {previewable ? (
-        <$FileViewer file={file} />
+        unencryptedUpload ? (
+          <PreviewContainer file={file}>
+            <PreviewURL type={fileType} url={publicFileURL(file.key)} />
+          </PreviewContainer>
+        ) : (
+          <EncryptedFileViewer file={file} />
+        )
       ) : (
         <div class={previewRoot}>
           <div class={textCenter}>
@@ -52,10 +65,15 @@ export function FileViewer({
           </a>
         </div>
       )}
-      <div class={buttonsRoot}>
+      <div
+        style={!previous && !next ? {display: "none"} : {}}
+        class={buttonsRoot}
+      >
         <TextButton
           onClick={previous}
-          class={css({flex: 1, justifyContent: "center"})}
+          class={`${css({flex: 1, justifyContent: "center"})} ${
+            !previous ? css({opacity: "0", pointerEvents: "none"}) : ""
+          }`}
           mode="secondary"
           variant="shadow"
           prefix={<ChevronLeftIcon />}
@@ -64,7 +82,9 @@ export function FileViewer({
         </TextButton>
         <TextButton
           onClick={next}
-          class={css({flex: 1, justifyContent: "center"})}
+          class={`${css({flex: 1, justifyContent: "center"})} ${
+            !next ? css({opacity: "0", pointerEvents: "none"}) : ""
+          }`}
           mode="secondary"
           variant="shadow"
           suffix={<ChevronRightIcon />}
@@ -76,7 +96,7 @@ export function FileViewer({
   );
 }
 
-function FileName({file}: {file: FileMetadata}) {
+export function FileName({file}: {file: FileMetadata}) {
   const unEncrypted = file.customMetadata.upload.unencryptedUpload;
   const cls = textCenter;
   if (unEncrypted)
@@ -92,7 +112,7 @@ function FileName({file}: {file: FileMetadata}) {
   return <div class={cls}>{file.customMetadata.upload.name}</div>;
 }
 
-function $FileViewer({file}: {file: FileMetadata}) {
+function EncryptedFileViewer({file}: {file: FileMetadata}) {
   const ref = useCancellableControllerRef();
   const [keys] = useAccountKeys();
   const [status, setStatus] = useState<
@@ -100,6 +120,7 @@ function $FileViewer({file}: {file: FileMetadata}) {
   >("PENDING");
   const [finalBlob, setFinalBlob] = useState<Blob>();
   const hasPreview = !!file.previewMetadata?.upload?.mediaMetadata;
+
   const [percent, setPercent] = useState(0);
   useEffect(() => {
     setStatus("DOWNLOADING");
@@ -127,9 +148,6 @@ function $FileViewer({file}: {file: FileMetadata}) {
     };
   }, [file]);
 
-  const dims =
-    hasPreview && file.previewMetadata.upload.mediaMetadata.originalDimensions;
-
   if (status === "ERROR") {
     return (
       <div>
@@ -142,62 +160,16 @@ function $FileViewer({file}: {file: FileMetadata}) {
   }
   if (status === "DONE") {
     return (
-      <div class={previewRoot}>
-        <FileName file={file} />
-        <div
-          class={previewContainer}
-          style={
-            dims
-              ? {height: `${dims[1]}px`, width: `${dims[0]}px`}
-              : {height: "100%"}
-          }
-        >
-          <PreviewBlob blob={finalBlob} />
-        </div>
-      </div>
+      <PreviewContainer file={file}>
+        <PreviewBlob blob={finalBlob} />
+      </PreviewContainer>
     );
   }
   if (status === "DECRYPTING" || status === "DOWNLOADING") {
     if (hasPreview) {
-      return (
-        <div class={previewRoot}>
-          <FileName file={file} />
-          <div
-            class={previewContainer}
-            style={{
-              height: `${dims[1]}px`,
-              width: `${dims[0]}px`,
-              "--ratio": `${dims[0]}/${dims[1]}`,
-            }}
-          >
-            <PreviewDecrypt
-              decryptionKeys={keys}
-              file={file}
-              className={css({height: "100%", aspectRatio: "var(--ratio)"})}
-            />
-          </div>
-
-          <div class={textCenter} style={{"--p": percent}}>
-            {percent.toFixed(2)}
-          </div>
-        </div>
-      );
+      return <LoaderWithPreview file={file} percent={percent} keys={keys} />;
     }
-    return (
-      <div class={previewRoot}>
-        <FileName file={file} />
-        <SpinnerIcon size={"4rem"} />
-        <div
-          class={css({
-            fontVariantNumeric: "tabular-nums",
-            fontSize: "3rem",
-            textAlign: "center",
-          })}
-        >
-          {(percent * 100).toFixed(2)}%
-        </div>
-      </div>
-    );
+    return <UnknownSpinner file={file} percent={percent} />;
   }
   if (status === "PENDING") return <div></div>;
 }
