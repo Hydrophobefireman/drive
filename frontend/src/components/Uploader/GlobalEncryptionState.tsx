@@ -7,10 +7,13 @@ import {Switch} from "@kit/input";
 
 export function GlobalEncryptionState() {
   useFileUploadPreference();
-  const isEncryptingEveryFile = uploadManager
+  const total = uploadManager.getPendingUploads().count();
+  const encrypting = uploadManager
     .getPendingUploads()
-    .all((file) => file.shouldEncrypt);
-  const label = `${isEncryptingEveryFile ? "" : "Not"} Encrypting every file`;
+    .filter((f) => f.shouldEncrypt)
+    .count();
+
+  const label = `encrypting ${encrypting}/${total} files`;
   return (
     <Box
       vertical="center"
@@ -22,7 +25,7 @@ export function GlobalEncryptionState() {
           const {checked} = e.currentTarget as HTMLInputElement;
           uploadManager.batched_setEncryptionStatus(checked);
         }}
-        state={isEncryptingEveryFile ? "enabled" : "disabled"}
+        state={encrypting === total ? "enabled" : "disabled"}
         label={label}
       />
       <span>{label}</span>
