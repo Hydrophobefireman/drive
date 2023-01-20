@@ -52,22 +52,12 @@ function downloadPreview(
   };
 }
 function $PreviewDecrypt({
-  decryptionKeys,
-  file,
   blurHash,
+  resp,
   className,
-}: PreviewInit) {
+}: PreviewInit & {resp: Blob | {error: string}}) {
   // file.key = null;
-  const {resp} = useResource(
-    downloadPreview,
-    [
-      file?.key && file.previewMetadata ? previewFileURL(file.key) : null,
-      decryptionKeys,
-      file.previewMetadata.upload,
-    ],
-    null,
-    [file?.key, decryptionKeys]
-  );
+
   const [previewURL] = useObjectUrl(resp instanceof Blob ? resp : null);
   const showHash = !resp || "error" in resp;
   return (
@@ -84,8 +74,18 @@ export function PreviewDecrypt(props: PreviewInit) {
     accKey: props.decryptionKeys,
     meta: props.file,
   });
-
-  if (needsHash && !blurHash)
+  const {file, decryptionKeys} = props;
+  const {resp} = useResource(
+    downloadPreview,
+    [
+      file?.key && file.previewMetadata ? previewFileURL(file.key) : null,
+      decryptionKeys,
+      file.previewMetadata.upload,
+    ],
+    null,
+    [file?.key, decryptionKeys]
+  );
+  if (needsHash && !blurHash && !resp)
     return (
       <div
         class={css({
@@ -102,5 +102,5 @@ export function PreviewDecrypt(props: PreviewInit) {
         <SpinnerIcon />
       </div>
     );
-  return <$PreviewDecrypt {...props} blurHash={blurHash} />;
+  return <$PreviewDecrypt {...props} resp={resp} blurHash={blurHash} />;
 }
