@@ -128,7 +128,7 @@ class Thumbnail {
           }, "image/png");
         });
       }),
-      new Promise((r) => {
+      new Promise<ThumbResult>((r) => {
         setTimeout(() => {
           console.log("timeout");
           r(null);
