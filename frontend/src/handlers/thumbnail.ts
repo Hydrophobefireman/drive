@@ -93,34 +93,48 @@ class Thumbnail {
   }
   private async _fromVideo() {
     const video = document.createElement("video");
-    const prom = new Promise<ThumbResult>((resolve, reject) => {
-      video.addEventListener("loadedmetadata", async () => {
-        const frame = await this._getRandomVideoFrame(video);
-        if (frame == null) return resolve(null);
-        const seekedPromise = new Promise((resolve) =>
-          video.addEventListener("seeked", resolve, {once: true})
-        );
-        video.currentTime = frame;
-        await seekedPromise;
-        const {canvas, ctx} = this._canvas(video);
+    const prom = Promise.race([
+      new Promise<ThumbResult>((resolve, reject) => {
+        video.addEventListener("loadedmetadata", async () => {
+          const frame = await this._getRandomVideoFrame(video);
+          if (frame == null) return resolve(null);
+          const seekedPromise = new Promise((resolve) =>
+            video.addEventListener("seeked", resolve, {once: true})
+          );
+          video.currentTime = frame;
+          await seekedPromise;
+          const {canvas, ctx} = this._canvas(video);
 
-        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+          ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-        canvas.toBlob((b) => {
-          if (b == null) return reject(null);
-          const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-          const hash = encode(imgData.data, canvas.width, canvas.height, 4, 3);
-          resolve({
-            blob: b,
-            hash,
-            meta: {
-              originalDimensions: [video.videoWidth, video.videoHeight],
-              thumbnailDimensions: [canvas.width, canvas.height],
-            },
-          });
-        }, "image/png");
-      });
-    });
+          canvas.toBlob((b) => {
+            if (b == null) return reject(null);
+            const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const hash = encode(
+              imgData.data,
+              canvas.width,
+              canvas.height,
+              4,
+              3
+            );
+            resolve({
+              blob: b,
+              hash,
+              meta: {
+                originalDimensions: [video.videoWidth, video.videoHeight],
+                thumbnailDimensions: [canvas.width, canvas.height],
+              },
+            });
+          }, "image/png");
+        });
+      }),
+      new Promise((r) => {
+        setTimeout(() => {
+          console.log("timeout");
+          r(null);
+        }, 10000);
+      }),
+    ]);
     video.src = this._createObjectURL();
     return prom;
   }
