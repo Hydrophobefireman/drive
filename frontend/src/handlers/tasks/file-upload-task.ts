@@ -68,6 +68,7 @@ export class FileUploadTask {
       keys: this.encryptionKeys,
       previewUploadURL,
     });
+    if (!getResult) return false;
     this.previewController = controller;
     const result = await getResult();
     return result.ok;

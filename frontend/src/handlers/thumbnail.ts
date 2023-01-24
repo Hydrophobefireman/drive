@@ -75,19 +75,28 @@ class Thumbnail {
   }
 
   _getRandomVideoFrame(video: HTMLVideoElement) {
-    return new Promise<number>((resolve) => {
-      video.addEventListener(
-        "loadeddata",
-        () => resolve(Math.floor(Math.random() * Math.floor(video.duration))),
-        false
-      );
-    });
+    return Promise.race([
+      new Promise<number>((resolve) => {
+        video.addEventListener(
+          "loadeddata",
+          () => resolve(Math.floor(Math.random() * Math.floor(video.duration))),
+          false
+        );
+      }),
+      new Promise<number>((r) =>
+        setTimeout(() => {
+          console.log("timeout");
+          r(null);
+        }, 10000)
+      ),
+    ]);
   }
   private async _fromVideo() {
     const video = document.createElement("video");
     const prom = new Promise<ThumbResult>((resolve, reject) => {
       video.addEventListener("loadedmetadata", async () => {
         const frame = await this._getRandomVideoFrame(video);
+        if (frame == null) return resolve(null);
         const seekedPromise = new Promise((resolve) =>
           video.addEventListener("seeked", resolve, {once: true})
         );

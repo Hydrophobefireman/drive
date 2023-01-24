@@ -8,6 +8,7 @@ import {createThumbnail} from "./thumbnail";
 const PREVIEW_WIDTH = 300;
 export async function previewGenerator(file: File, keys: string) {
   const thumb = await createThumbnail(file, {width: PREVIEW_WIDTH});
+  if (!thumb) return [];
   const {blob, hash, meta} = thumb;
   const buf = await blobToArrayBuffer(blob);
   const {encryptedBuf, meta: encryptedMeta} = await encrypt(buf, keys, {
@@ -45,6 +46,7 @@ export async function uploadPreview({
   keys: string;
 }) {
   const [encryptedBuf, encryptedMeta] = await previewGenerator(file, keys);
+  if (!encryptedBuf) return {};
   const controller = new AbortController();
   const getResult = () =>
     sendToR2(previewUploadURL, encryptedBuf, controller, encryptedMeta);
