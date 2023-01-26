@@ -47,15 +47,19 @@ export function LoaderWithPreview({
       <div
         class={previewContainer}
         style={{
-          height: `${dims[1]}px`,
-          width: `${dims[0]}px`,
+          "--w": dims[0] > dims[1] ? `${dims[0]}px` : "auto",
+          // "--h": dims[1] > dims[0] ? `${dims[1]}px` : "100%",
           "--ratio": `${dims[0]}/${dims[1]}`,
         }}
       >
         <PreviewDecrypt
           decryptionKeys={keys}
           file={file}
-          className={css({height: "100%", aspectRatio: "var(--ratio)"})}
+          className={css({
+            height: "100%",
+            width: "var(--w)",
+            aspectRatio: "var(--ratio)",
+          })}
         />
       </div>
 
@@ -87,16 +91,7 @@ export function PreviewContainer({
 
   return (
     <ViewerRoot file={file}>
-      <div
-        class={previewContainer}
-        style={
-          dims
-            ? {height: `${dims[1]}px`, width: `${dims[0]}px`}
-            : {height: "100%"}
-        }
-      >
-        {children}
-      </div>
+      <div class={previewContainer}>{children}</div>
     </ViewerRoot>
   );
 }
