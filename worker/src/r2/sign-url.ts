@@ -13,5 +13,5 @@ export async function signUrl(
     method.toUpperCase() === "GET"
       ? new GetObjectCommand(conf)
       : new PutObjectCommand(conf);
-  return await getSignedUrl(r2, cmd, {expiresIn: SEVEN_DAYS,});
+  return await getSignedUrl(r2, cmd, {expiresIn: SEVEN_DAYS});
 }

@@ -9,7 +9,7 @@
     "build": "cross-env NODE_ENV=production webpack --config webpack.config.js",
     "prebuild": "tsc --noEmit && node scripts/prebuild.js",
     "postbuild": "node scripts/postbuild.js",
-    "prepare": "husky install"
+    "prepare": "cd .. && husky install instant"
   },
   "author": "Hudrophobefireman",
   "license": "ISC",
@@ -17,13 +17,15 @@
     "url": "https://github.com/Hydrophobefireman/ui-lib-boilerplate/issues"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.328.0",
+    "@aws-sdk/s3-request-presigner": "^3.328.0",
     "@hydrophobefireman/flask-jwt-jskit": "^0.1.16",
     "@hydrophobefireman/j-utils": "^2.1.10",
     "@hydrophobefireman/kit": "^0.0.36",
     "@hydrophobefireman/qwc": "^0.0.6",
     "@hydrophobefireman/ui-lib": "^2.0.0",
-    "lightningcss": "^1.19.0",
     "browserslist": "^4.21.5",
+    "lightningcss": "^1.19.0",
     "statedrive": "^0.0.16"
   },
   "devDependencies": {
