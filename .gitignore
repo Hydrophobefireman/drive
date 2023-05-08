@@ -117,3 +117,4 @@ docs/
 build/
 .catom.css
 .s3
+.vercel

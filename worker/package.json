@@ -11,9 +11,9 @@
   "license": "ISC",
   "dependencies": {
     "@aws-sdk/client-s3": "^3.328.0",
+    "hono": "^2.6.2",
     "@aws-sdk/s3-request-presigner": "^3.328.0",
     "@hydrophobefireman/lazy": "^0.0.5",
-    "hono": "^3.1.8",
     "range-parser": "^1.2.1"
   },
   "devDependencies": {

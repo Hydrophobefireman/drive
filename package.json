@@ -11,7 +11,8 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
-    "husky": "^8.0.3"
+    "husky": "^8.0.3",
+    "yarn": "^1.22.19"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20221111.1",
