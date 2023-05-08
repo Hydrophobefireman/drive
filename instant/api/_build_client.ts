@@ -1,6 +1,6 @@
 const {S3Client} = require("@aws-sdk/client-s3");
 const {env} = process;
-export function buildClient() {
+module.exports.buildClient = function buildClient() {
   return new S3Client({
     region: "auto",
     endpoint: `https://${env.CF_ACCOUNT_ID}.r2.cloudflarestorage.com`,
@@ -9,4 +9,4 @@ export function buildClient() {
       secretAccessKey: env.R2_ACCESS_KEY_SECRET,
     },
   });
-}
+};
