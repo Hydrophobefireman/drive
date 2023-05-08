@@ -5,6 +5,10 @@ import {random} from "@hydrophobefireman/kit/dist/src/util";
 import {buildClient} from "./_build_client";
 import {stringToHex} from "./_util";
 
+export const config = {
+  runtime: "edge",
+};
+
 const SEVEN_DAYS = 604800;
 const r2 = buildClient();
 async function signUrl(config: {path: string; bucket: string}, method: string) {
@@ -17,11 +21,13 @@ async function signUrl(config: {path: string; bucket: string}, method: string) {
 }
 
 export default async function handle(request: Request) {
+  if (request.method.toLowerCase() !== "post")
+    return new Response("err", {status: 405});
   const {file} = await request.json();
   const safe = stringToHex(file);
   const res = await signUrl(
     {
-      path: random() + "/" + new Date() + "/" + file,
+      path: `${random()}/${new Date()}/${safe}`,
       bucket: "drive-instant",
     },
     "put"
