@@ -9,6 +9,6 @@ module.exports.stringToHex = function stringToHex(string: string) {
   return bytesToHex(e.encode(string));
 };
 
-module.exports.stringToHex = function randomString() {
-  return crypto.randomUUID() + crypto.randomUUID();
+module.exports.randomString = function randomString() {
+  return require("crypto").randomBytes(32).toString("hex");
 };
