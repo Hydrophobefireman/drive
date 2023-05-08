@@ -1,10 +1,10 @@
-import {GetObjectCommand, PutObjectCommand, S3Client} from "@aws-sdk/client-s3";
-import {getSignedUrl} from "@aws-sdk/s3-request-presigner";
-import {random} from "@hydrophobefireman/kit/dist/src/util";
-import type {VercelRequest, VercelResponse} from "@vercel/node";
+import {randomString} from "./_util";
 
-import {buildClient} from "./_build_client";
-import {stringToHex} from "./_util";
+const {GetObjectCommand, PutObjectCommand} = require("@aws-sdk/client-s3");
+const {getSignedUrl} = require("@aws-sdk/s3-request-presigner");
+
+const {buildClient} = require("./_build_client");
+const {stringToHex} = require("./_util");
 
 const SEVEN_DAYS = 604800;
 const r2 = buildClient();
@@ -18,8 +18,8 @@ async function signUrl(config: {path: string; bucket: string}, method: string) {
 }
 
 export default async function handle(
-  request: VercelRequest,
-  response: VercelResponse
+  request: import("@vercel/node").VercelRequest,
+  response: import("@vercel/node").VercelResponse
 ) {
   if (request.method.toLowerCase() !== "post")
     return response.status(405).json({error: "invalid method"});
@@ -27,7 +27,7 @@ export default async function handle(
   const safe = stringToHex(file);
   const res = await signUrl(
     {
-      path: `${random()}/${new Date()}/${safe}`,
+      path: `${randomString()}/${new Date()}/${safe}`,
       bucket: "drive-instant",
     },
     "put"
