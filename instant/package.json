@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "no",
   "private": true,
-  "main": "index.js","type": "module",
+  "main": "index.js",
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-cli serve",
     "build": "cross-env NODE_ENV=production webpack --config webpack.config.js",
