@@ -1,4 +1,4 @@
-import {randomString} from "./_util";
+const {randomString} = require("./_util");
 
 const {GetObjectCommand, PutObjectCommand} = require("@aws-sdk/client-s3");
 const {getSignedUrl} = require("@aws-sdk/s3-request-presigner");

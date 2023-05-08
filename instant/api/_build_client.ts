@@ -1,4 +1,4 @@
-import {S3Client} from "@aws-sdk/client-s3";
+const {S3Client} = require("@aws-sdk/client-s3");
 const {env} = process;
 export function buildClient() {
   return new S3Client({

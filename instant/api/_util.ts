@@ -5,10 +5,10 @@ function bytesToHex(bytes: ArrayBuffer) {
   ).join("");
 }
 
-export function stringToHex(string: string) {
+module.exports.stringToHex = function stringToHex(string: string) {
   return bytesToHex(e.encode(string));
-}
+};
 
-export function randomString() {
+module.exports.stringToHex = function randomString() {
   return crypto.randomUUID() + crypto.randomUUID();
-}
+};
