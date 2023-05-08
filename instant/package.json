@@ -24,6 +24,7 @@
     "@hydrophobefireman/kit": "^0.0.36",
     "@hydrophobefireman/qwc": "^0.0.6",
     "@hydrophobefireman/ui-lib": "^2.0.0",
+    "@vercel/node": "^2.14.1",
     "browserslist": "^4.21.5",
     "lightningcss": "^1.19.0",
     "statedrive": "^0.0.16"
