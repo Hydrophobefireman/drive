@@ -17,7 +17,7 @@ async function signUrl(config: {path: string; bucket: string}, method: string) {
   return await getSignedUrl(r2, cmd, {expiresIn: SEVEN_DAYS});
 }
 
-export default async function handle(
+module.exports = async function handle(
   request: import("@vercel/node").VercelRequest,
   response: import("@vercel/node").VercelResponse
 ) {
@@ -33,4 +33,4 @@ export default async function handle(
     "put"
   );
   return response.json({data: res});
-}
+};
