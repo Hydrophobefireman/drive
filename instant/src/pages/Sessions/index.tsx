@@ -54,7 +54,10 @@ export default function Session() {
 
   const loc = new URL(`/sessions/${params.id}?mode=qr`, location.href).href;
   useInterval(
-    () => fetchResource(),
+    () => {
+      if (resp && (resp as any)?.url != null) return;
+      fetchResource();
+    },
     !location.host.includes("localhost") ? 2000 : 5000
   );
 
