@@ -1,4 +1,5 @@
 import "@kit/styles";
+import "@kit/css-reset";
 
 // javascript is supported
 import "./App.css";

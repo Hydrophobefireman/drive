@@ -16,11 +16,22 @@ async function signUrl(config: {path: string; bucket: string}, method: string) {
       : new PutObjectCommand(conf);
   return await getSignedUrl(r2, cmd, {expiresIn: SEVEN_DAYS});
 }
-
+console.log("aA");
 module.exports = async function handle(
   request: import("@vercel/node").VercelRequest,
   response: import("@vercel/node").VercelResponse
 ) {
+  if (request.method.toLowerCase() === "options") {
+    return response.send(null);
+  }
+  response = response.setHeader(
+    "access-control-allow-origin",
+    request.headers["origin"] || "*"
+  );
+  console.log("A");
+  if (request.method.toLowerCase() === "options") {
+    return response.send(null);
+  }
   if (request.method.toLowerCase() !== "post")
     return response.status(405).json({error: "invalid method"});
   const {file} = request.body;

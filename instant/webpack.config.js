@@ -191,4 +191,4 @@ function getCfg(isLegacy) {
   };
 }
 
-module.exports = isProd ? [getCfg(false), getCfg(true)] : getCfg(false);
+module.exports = getCfg(false);
