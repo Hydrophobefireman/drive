@@ -244,7 +244,13 @@ export default function Session() {
               >
                 {pathRef.current}
               </button>
-              <Modal.Actions>
+              <Modal.Actions
+                class={css({
+                  display: "grid",
+                  gridTemplateColumns: "1fr 1fr",
+                  gap: "1rem",
+                })}
+              >
                 <a
                   href="/"
                   class={css({
@@ -256,6 +262,7 @@ export default function Session() {
                     padding: ".25rem",
                     background: "var(--kit-shade-7)",
                     borderRadius: "5px",
+                    width: "100%",
                   })}
                 >
                   Upload another file
@@ -272,6 +279,7 @@ export default function Session() {
                     padding: ".25rem",
                     background: "var(--kit-shade-7)",
                     borderRadius: "5px",
+                    width: "100%",
                   })}
                 >
                   Close
