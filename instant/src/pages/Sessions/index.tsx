@@ -274,7 +274,7 @@ export default function Session() {
                     borderRadius: "5px",
                   })}
                 >
-                  Upload another file
+                  Close
                 </button>
               </Modal.Actions>
             </>
