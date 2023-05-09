@@ -48,6 +48,7 @@ export default function Session() {
     [number, number, number]
   >([null, null, null]);
   function handleFile(file: File) {
+    file = Array.isArray(file) ? file[0] : file;
     setState("uploading");
     const handler = new FileUploadTask(file);
     handler.manager.addListener((data) => {
@@ -64,7 +65,7 @@ export default function Session() {
         ]);
       }
     });
-    handler.start()
+    handler.start();
   }
   console.log(qr);
   return (
