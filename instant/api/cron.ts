@@ -22,7 +22,7 @@
 
     const objectsToDelete = [];
 
-    for (const object of objects.Contents) {
+    for (const object of objects.Contents || []) {
       const lastModified = +object.LastModified;
       if (isMoreThanADayOld(lastModified)) {
         objectsToDelete.push({Key: object.Key});
