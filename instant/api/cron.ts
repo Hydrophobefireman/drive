@@ -8,7 +8,7 @@
   const {buildClient} = require("./_build_client");
   const client: import("@aws-sdk/client-s3").S3Client = buildClient();
   function isMoreThanADayOld(timestamp: number): boolean {
-    const oneDayInMs = 200; // (debugging)
+    const oneDayInMs = 86_400_000;
     const currentTime = Date.now();
     const diffInMs = currentTime - timestamp;
     return diffInMs >= oneDayInMs;
