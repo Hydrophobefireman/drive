@@ -29,6 +29,7 @@ export class FileUploadTask {
   private controller: AbortController;
   public manager: Manager;
   public file: File;
+  public path: string;
   public get name() {
     return this.file.name;
   }
@@ -86,15 +87,16 @@ export class FileUploadTask {
     //   user: user,
     // });
     const json = await response.json();
-    const url = json.data;
-    const uploader = this.buildUploader(url);
-
+    const {sign, path} = json.data;
+    const uploader = this.buildUploader(sign);
+    this.path = path;
+    this.notifyStatusUpdate();
     let binary: RequestInit["body"];
 
     binary = await blobToArrayBuffer(this.file);
     uploader.headers({
       "content-type": this.file.type,
-      ...amzHeaders(url, {}),
+      ...amzHeaders(sign, {}),
     });
 
     this.notifyStatusUpdate();

@@ -29,13 +29,14 @@ module.exports = async function handle(
   if (request.method.toLowerCase() === "options") {
     return response.send(null);
   }
-
+  const path = `${+new Date()}/${randomString()}`;
   const res = await signUrl(
     {
-      path: `${randomString()}/${+new Date()}`,
+      path,
       bucket: "drive-instant",
     },
     "put"
   );
-  return response.json({data: res});
+  const url = `https://instant.drive.hpfm.dev/${path}`;
+  return response.json({data: {sign: res, path}});
 };
