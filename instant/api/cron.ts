@@ -58,14 +58,14 @@
         })
       )
     ).filter(Boolean);
-    kv.del(...toDel);
+    if (toDel.length) kv.del(...toDel);
     return toDel;
   }
   module.exports = async function handler(
     req: import("@vercel/node").VercelRequest,
     res: import("@vercel/node").VercelResponse
   ) {
-    const w = await Promise.all([handleKv()]);
+    const w = await Promise.all([handleKv(), handleR2()]);
     return res.json({ok: w});
   };
 }
