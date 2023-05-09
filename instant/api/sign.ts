@@ -29,8 +29,6 @@ module.exports = async function handle(
   if (request.method.toLowerCase() === "options") {
     return response.send(null);
   }
-  if (request.method.toLowerCase() !== "post")
-    return response.status(405).json({error: "invalid method"});
 
   const res = await signUrl(
     {
