@@ -240,7 +240,7 @@ export default function Session() {
                 {pathRef.current}
               </button>
               <Modal.Actions>
-                <A
+                <a
                   href="/"
                   class={css({
                     display: "flex",
@@ -254,7 +254,7 @@ export default function Session() {
                   })}
                 >
                   Upload another file
-                </A>
+                </a>
 
                 <button
                   onClick={() => setState("idle")}
