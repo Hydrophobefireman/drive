@@ -186,6 +186,7 @@ export default function Session() {
           <div class={css({fontSize: "1.2rem", fontWeight: "bold"})}>
             Your file is ready!
           </div>
+          <div>Files will be deleted in around 24 hours.</div>
           <div
             class={css({display: "flex", gap: "2rem", marginTop: "0.25rem"})}
           >
