@@ -157,39 +157,38 @@ export default function Session() {
             {state === "done" ? "Click to copy" : "Uploading"}
           </Modal.Title>
           {state == "error" && <div>{errorRef.current}</div>}
-          {state === "done" ||
-            (true && (
-              <>
-                <button
-                  onClick={() => navigator.clipboard.writeText(pathRef.current)}
+          {state === "done" && (
+            <>
+              <button
+                onClick={() => navigator.clipboard.writeText(pathRef.current)}
+                class={css({
+                  overflow: "hidden",
+                  maxWidth: "100%",
+                  textOverflow: "ellipsis",
+                })}
+              >
+                {pathRef.current ||
+                  "https://instant.drive.hpfm.dev/cvuioweheowifvcwerklvnjeriov/cvwneuoivfchjweriofvjeiouwej"}
+              </button>
+              <Modal.Actions>
+                <A
+                  href="/"
                   class={css({
-                    overflow: "hidden",
-                    maxWidth: "100%",
-                    textOverflow: "ellipsis",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    margin: "auto",
+                    marginTop: ".5rem",
+                    padding: ".25rem",
+                    background: "var(--kit-shade-7)",
+                    borderRadius: "5px",
                   })}
                 >
-                  {pathRef.current ||
-                    "https://instant.drive.hpfm.dev/cvuioweheowifvcwerklvnjeriov/cvwneuoivfchjweriofvjeiouwej"}
-                </button>
-                <Modal.Actions>
-                  <A
-                    href="/"
-                    class={css({
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      margin: "auto",
-                      marginTop: ".5rem",
-                      padding: ".25rem",
-                      background: "var(--kit-shade-7)",
-                      borderRadius: "5px",
-                    })}
-                  >
-                    Upload another file
-                  </A>
-                </Modal.Actions>
-              </>
-            ))}
+                  Upload another file
+                </A>
+              </Modal.Actions>
+            </>
+          )}
           {done != null && left != null && state !== "done" && (
             <div>
               <div
