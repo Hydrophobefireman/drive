@@ -15,7 +15,7 @@ import {
 } from "@hydrophobefireman/ui-lib";
 import {Button} from "@kit/button";
 import {FileDropTarget} from "@kit/file-drop-target";
-import {useInterval, useResource} from "@kit/hooks";
+import {useCachingResource, useInterval, useResource} from "@kit/hooks";
 import {Modal} from "@kit/modal";
 
 function fetchSession(
@@ -46,12 +46,16 @@ function humanReadableSize(bytes: number): string {
 const cache = createState({name: "x"});
 export default function Session() {
   const {params, search} = useRoute();
-  const {resp, fetchResource} = useResource(fetchSession, [params.id], cache);
+  const {resp, fetchResource} = useCachingResource(
+    fetchSession,
+    [params.id],
+    cache
+  );
 
   const loc = new URL(`/sessions/${params.id}?mode=qr`, location.href).href;
   useInterval(
     () => fetchResource(),
-    !location.host.includes("localhost") ? 2000 : null
+    !location.host.includes("localhost") ? 2000 : 5000
   );
 
   const [state, setState] = useState<"idle" | "uploading" | "done" | "error">(
@@ -84,6 +88,7 @@ export default function Session() {
     });
     handler.start();
   }
+
   const [showDownloadQr, setShowDownloadQr] = useState(false);
   if (!resp) return;
   if ("error" in resp) return <div>{resp.error}</div>;
