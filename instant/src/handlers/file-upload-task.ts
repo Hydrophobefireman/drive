@@ -1,5 +1,6 @@
 import {amzHeaders} from "@/util/amz-headers";
 import {signURLRoute} from "@/util/routes";
+import {blobToArrayBuffer} from "@hydrophobefireman/j-utils";
 
 import {ProgressRequest} from "./progress-uploader";
 
@@ -78,11 +79,7 @@ export class FileUploadTask {
     this.status = "STARTED";
 
     this.notifyStatusUpdate();
-    const response = await fetch(signURLRoute, {
-      headers: {"content-type": "application/json"},
-      body: JSON.stringify({file: this.name}),
-      method: "POST",
-    });
+    const response = await fetch(signURLRoute, {});
     // const {controller, result} = requestSignedURL({
     //   file: this.name,
     //   method: "PUT",
@@ -94,7 +91,7 @@ export class FileUploadTask {
 
     let binary: RequestInit["body"];
 
-    binary = this.file;
+    binary = await blobToArrayBuffer(this.file);
     uploader.headers({
       "content-type": this.file.type,
       ...amzHeaders(url, {}),
