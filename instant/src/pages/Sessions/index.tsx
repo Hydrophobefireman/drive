@@ -10,6 +10,7 @@ import {AbortableFetchResponse} from "@hydrophobefireman/flask-jwt-jskit";
 import {
   A,
   loadURL,
+  redirect,
   useEffect,
   useRef,
   useRoute,
@@ -22,7 +23,9 @@ import {Modal} from "@kit/modal";
 
 function fetchSession(
   x: string
-): AbortableFetchResponse<{url: string | null; createdAt: number}> {
+): AbortableFetchResponse<
+  {url: string | null; createdAt: number} | {error: string}
+> {
   if (!x)
     return {
       controller: new AbortController(),
@@ -46,25 +49,14 @@ function humanReadableSize(bytes: number): string {
 const cache = createState({name: "x"});
 export default function Session() {
   const {params, search} = useRoute();
-  const {resp, fetchResource} = useCachingResource(
-    fetchSession,
-    [params.id],
-    cache
-  );
-  const [qr, setQr] = useState<string | null>("");
+  const {resp, fetchResource} = useResource(fetchSession, [params.id], cache);
+
   const loc = new URL(`/sessions/${params.id}?mode=qr`, location.href).href;
   useInterval(
     () => fetchResource(),
     !location.host.includes("localhost") ? 2000 : null
   );
-  useEffect(() => {
-    setQr(null);
-    if (!params.id) return;
-    (async () => {
-      const url = await QRCode.toDataURL(loc);
-      setQr(url);
-    })();
-  }, [loc]);
+
   const [state, setState] = useState<"idle" | "uploading" | "done" | "error">(
     "idle"
   );
@@ -81,7 +73,7 @@ export default function Session() {
       pathRef.current = handler.path;
       if (handler.status === "COMPLETE") {
         setState("done");
-        fetch(updateSessionRoute(params.id, handler.path));
+        fetch(updateSessionRoute(params.id, handler.path, file.name));
       } else if (handler.status === "ERROR") {
         setState("error");
         errorRef.current = handler.errorMessage;
@@ -95,8 +87,9 @@ export default function Session() {
     });
     handler.start();
   }
-  console.log(qr);
+  const [showDownloadQr, setShowDownloadQr] = useState(false);
   if (!resp) return;
+  if ("error" in resp) return <div>{resp.error}</div>;
   return (
     <section
       data-id={params.id}
@@ -108,29 +101,55 @@ export default function Session() {
         flexDirection: "column",
       })}
     >
-      <h1>Temp Files</h1>
-      <div>Files uploaded here will be deleted every 24 hours</div>
-      <FileDropTarget
-        class={css({
-          pseudo: {
-            ".kit-file-drop-target": {
-              border: "1px dashed white",
-              padding: "1.5rem",
-              background: "black",
-              width: "90%",
-              marginLeft: "auto",
-              marginRight: "auto",
-              maxWidth: "500px",
-            },
-          },
-        })}
-        onUpdate={handleFile}
-        message="Drag and drop"
-      >
-        <Button label="select files">Select files</Button>
-      </FileDropTarget>
+      <Modal active={showDownloadQr}>
+        <Modal.Body>
+          <Qr text={resp.url} />
+          <Modal.Actions>
+            <button
+              onClick={() => setShowDownloadQr(false)}
+              class={css({
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                margin: "auto",
+                marginTop: ".5rem",
+                padding: ".25rem",
+                background: "var(--kit-shade-7)",
+                borderRadius: "5px",
+              })}
+            >
+              Close
+            </button>
+          </Modal.Actions>
+        </Modal.Body>
+      </Modal>
+      {!resp.url && (
+        <>
+          <h1>Temp Files</h1>
+          <div>Files uploaded here will be deleted every 24 hours</div>
+          <FileDropTarget
+            class={css({
+              pseudo: {
+                ".kit-file-drop-target": {
+                  border: "1px dashed white",
+                  padding: "1.5rem",
+                  background: "black",
+                  width: "90%",
+                  marginLeft: "auto",
+                  marginRight: "auto",
+                  maxWidth: "500px",
+                },
+              },
+            })}
+            onUpdate={handleFile}
+            message="Drag and drop"
+          >
+            <Button label="select files">Select files</Button>
+          </FileDropTarget>
+        </>
+      )}
 
-      {search.get("mode") !== "qr" && !resp?.url && qr && (
+      {search.get("mode") !== "qr" && !resp?.url && (
         <div
           class={css({
             marginTop: "2rem",
@@ -140,17 +159,65 @@ export default function Session() {
           })}
         >
           <div>Scan the code to upload the file from a different device</div>
-          <img
-            data-href={loc}
-            class={css({marginTop: "2rem"})}
-            src={qr}
-            alt="qr"
-            height={196}
-            width={196}
-          />
+          <Qr text={params.id ? loc : null} />
         </div>
       )}
-
+      {resp.url && (
+        <div
+          class={css({
+            marginTop: "2rem",
+            border: "1px solid",
+            padding: "1rem",
+            borderRadius: "10px",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "90%",
+            maxWidth: "500px",
+            boxShadow: "var(--kit-shadow)",
+          })}
+        >
+          <div class={css({fontSize: "1.2rem", fontWeight: "bold"})}>
+            Your file is ready!
+          </div>
+          <div
+            class={css({display: "flex", gap: "2rem", marginTop: "0.25rem"})}
+          >
+            <a
+              class={css({
+                padding: "0.5rem",
+                background: "var(--kit-shade-7)",
+                transition: "0.3s ease-in-out",
+                pseudo: {
+                  ":hover": {
+                    background: "var(--kit-shade-6)",
+                  },
+                },
+              })}
+              href={resp.url}
+              download
+            >
+              Download file
+            </a>
+            <button
+              onClick={() => setShowDownloadQr(true)}
+              class={css({
+                padding: "0.5rem",
+                background: "var(--kit-shade-7)",
+                transition: "0.3s ease-in-out",
+                pseudo: {
+                  ":hover": {
+                    background: "var(--kit-shade-6)",
+                  },
+                },
+              })}
+            >
+              Show QR Code
+            </button>
+          </div>
+        </div>
+      )}
       <Modal active={state !== "idle"}>
         <Modal.Body>
           <Modal.Title>
@@ -165,10 +232,15 @@ export default function Session() {
                   overflow: "hidden",
                   maxWidth: "100%",
                   textOverflow: "ellipsis",
+                  transition: "0.3s ease-in-out",
+                  pseudo: {
+                    ":hover": {
+                      background: "var(--kit-shade-7)",
+                    },
+                  },
                 })}
               >
-                {pathRef.current ||
-                  "https://instant.drive.hpfm.dev/cvuioweheowifvcwerklvnjeriov/cvwneuoivfchjweriofvjeiouwej"}
+                {pathRef.current}
               </button>
               <Modal.Actions>
                 <A
@@ -186,6 +258,22 @@ export default function Session() {
                 >
                   Upload another file
                 </A>
+
+                <button
+                  onClick={() => setState("idle")}
+                  class={css({
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    margin: "auto",
+                    marginTop: ".5rem",
+                    padding: ".25rem",
+                    background: "var(--kit-shade-7)",
+                    borderRadius: "5px",
+                  })}
+                >
+                  Upload another file
+                </button>
               </Modal.Actions>
             </>
           )}
@@ -210,5 +298,27 @@ export default function Session() {
         </Modal.Body>
       </Modal>
     </section>
+  );
+}
+
+function Qr({text}: {text: string}) {
+  const [qr, setQr] = useState<string | null>("");
+  useEffect(() => {
+    setQr(null);
+    if (!text) return;
+    (async () => {
+      const url = await QRCode.toDataURL(text);
+      setQr(url);
+    })();
+  }, [text]);
+  return (
+    <img
+      data-href={text}
+      class={css({marginTop: "2rem"})}
+      src={qr}
+      alt="qr"
+      height={196}
+      width={196}
+    />
   );
 }

@@ -12,9 +12,7 @@ export const getSessionDetailsRoute = (x: string) =>
 
 export const signURLRoute = getURL("/api/sign");
 
-export const updateSessionRoute = (s: string, u: string) =>
+export const updateSessionRoute = (s: string, u: string, name: string) =>
   getURL(
-    `/api/update-session?session=${encodeURIComponent(
-      s
-    )}&url=${encodeURIComponent(u)}`
+    `/api/update-session?${new URLSearchParams({session: s, url: u, name})}`
   );

@@ -37,6 +37,6 @@ module.exports = async function handle(
     },
     "put"
   );
-  const url = `https://instant.drive.hpfm.dev/${path}`;
+  const url = `https://cdn.instant.drive.hpfm.dev/${path}`;
   return response.json({data: {sign: res, path: url}});
 };
