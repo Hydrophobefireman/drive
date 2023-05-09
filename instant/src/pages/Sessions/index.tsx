@@ -2,15 +2,12 @@ import {css} from "catom";
 import QRCode from "qrcode";
 import {createState} from "statedrive";
 
-import {createSession} from "@/handlers/create-session";
 import {FileUploadTask} from "@/handlers/file-upload-task";
 import {requests} from "@/util/bridge";
 import {getSessionDetailsRoute, updateSessionRoute} from "@/util/routes";
 import {AbortableFetchResponse} from "@hydrophobefireman/flask-jwt-jskit";
 import {
   A,
-  loadURL,
-  redirect,
   useEffect,
   useRef,
   useRoute,
@@ -18,7 +15,7 @@ import {
 } from "@hydrophobefireman/ui-lib";
 import {Button} from "@kit/button";
 import {FileDropTarget} from "@kit/file-drop-target";
-import {useCachingResource, useInterval, useResource} from "@kit/hooks";
+import {useInterval, useResource} from "@kit/hooks";
 import {Modal} from "@kit/modal";
 
 function fetchSession(

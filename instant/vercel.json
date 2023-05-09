@@ -1,4 +1,10 @@
 {
-  "rewrites": [{ "source": "/(.*)", "destination": "/" }],
-  "cleanUrls": true
+  "rewrites": [{"source": "/(.*)", "destination": "/"}],
+  "cleanUrls": true,
+  "crons": [
+    {
+      "path": "/api/cron",
+      "schedule": "0 0 * * *"
+    }
+  ]
 }
