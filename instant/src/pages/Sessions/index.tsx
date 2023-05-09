@@ -1,5 +1,6 @@
 import {css} from "catom";
 import QRCode from "qrcode";
+import {createState} from "statedrive";
 
 import {createSession} from "@/handlers/create-session";
 import {FileUploadTask} from "@/handlers/file-upload-task";
@@ -7,6 +8,7 @@ import {requests} from "@/util/bridge";
 import {getSessionDetailsRoute, updateSessionRoute} from "@/util/routes";
 import {AbortableFetchResponse} from "@hydrophobefireman/flask-jwt-jskit";
 import {
+  A,
   loadURL,
   useEffect,
   useRef,
@@ -15,7 +17,7 @@ import {
 } from "@hydrophobefireman/ui-lib";
 import {Button} from "@kit/button";
 import {FileDropTarget} from "@kit/file-drop-target";
-import {useInterval, useResource} from "@kit/hooks";
+import {useCachingResource, useInterval, useResource} from "@kit/hooks";
 import {Modal} from "@kit/modal";
 
 function fetchSession(
@@ -23,7 +25,7 @@ function fetchSession(
 ): AbortableFetchResponse<{url: string | null; createdAt: number}> {
   if (!x)
     return {
-      controller: null,
+      controller: new AbortController(),
       headers: null,
       result: Promise.resolve({error: "invalid", data: null}),
     };
@@ -41,10 +43,14 @@ function humanReadableSize(bytes: number): string {
 
   return `${size} ${sizes[i]}`;
 }
-
+const cache = createState({name: "x"});
 export default function Session() {
   const {params, search} = useRoute();
-  const {resp, fetchResource} = useResource(fetchSession, [params.id]);
+  const {resp, fetchResource} = useCachingResource(
+    fetchSession,
+    [params.id],
+    cache
+  );
   const [qr, setQr] = useState<string | null>("");
   const loc = new URL(`/sessions/${params.id}?mode=qr`, location.href).href;
   useInterval(
@@ -90,6 +96,7 @@ export default function Session() {
     handler.start();
   }
   console.log(qr);
+  if (!resp) return;
   return (
     <section
       data-id={params.id}
@@ -146,18 +153,43 @@ export default function Session() {
 
       <Modal active={state !== "idle"}>
         <Modal.Body>
-          <Modal.Title>Uploading</Modal.Title>
+          <Modal.Title>
+            {state === "done" ? "Click to copy" : "Uploading"}
+          </Modal.Title>
           {state == "error" && <div>{errorRef.current}</div>}
-          {state === "done" && (
-            <>
-              <div>{pathRef.current}</div>
-              <Modal.Actions>
-                <Modal.Action onClick={() => loadURL("/")}>
-                  Upload another file
-                </Modal.Action>
-              </Modal.Actions>
-            </>
-          )}
+          {state === "done" ||
+            (true && (
+              <>
+                <button
+                  onClick={() => navigator.clipboard.writeText(pathRef.current)}
+                  class={css({
+                    overflow: "hidden",
+                    maxWidth: "100%",
+                    textOverflow: "ellipsis",
+                  })}
+                >
+                  {pathRef.current ||
+                    "https://instant.drive.hpfm.dev/cvuioweheowifvcwerklvnjeriov/cvwneuoivfchjweriofvjeiouwej"}
+                </button>
+                <Modal.Actions>
+                  <A
+                    href="/"
+                    class={css({
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      margin: "auto",
+                      marginTop: ".5rem",
+                      padding: ".25rem",
+                      background: "var(--kit-shade-7)",
+                      borderRadius: "5px",
+                    })}
+                  >
+                    Upload another file
+                  </A>
+                </Modal.Actions>
+              </>
+            ))}
           {done != null && left != null && state !== "done" && (
             <div>
               <div
