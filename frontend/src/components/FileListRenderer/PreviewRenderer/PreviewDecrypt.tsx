@@ -40,7 +40,7 @@ function downloadPreview(
       if ("error" in x) {
         return {error: x.error, data: null as Blob};
       }
-      const ab: ArrayBuffer = x as any;
+      const ab: ArrayBuffer = x.data;
       const res = await decrypt({encryptedBuf: ab, meta}, keys);
       if (!("error" in res)) {
         cache.set(url, new Blob([res]));
