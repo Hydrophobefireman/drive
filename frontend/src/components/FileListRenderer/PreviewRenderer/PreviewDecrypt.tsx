@@ -1,17 +1,17 @@
-import {css} from "catom";
-import {Img} from "~/components/Img";
-import {decrypt} from "~/crypto/decrypt";
-import {previewFileURL} from "~/handlers/routes";
-import {useObjectUrl} from "~/hooks/use-object-url";
-import {PreviewEncryptionMetadata} from "~/types/files";
-import {PreviewInit} from "~/types/preview";
-import {requests} from "~/util/bridge";
+import { css } from "catom";
+import { Img } from "~/components/Img";
+import { decrypt } from "~/crypto/decrypt";
+import { previewFileURL } from "~/handlers/routes";
+import { useObjectUrl } from "~/hooks/use-object-url";
+import { PreviewEncryptionMetadata } from "~/types/files";
+import { PreviewInit } from "~/types/preview";
+import { requests } from "~/util/bridge";
 
-import {SpinnerIcon} from "@hydrophobefireman/kit-icons";
-import {useResource} from "@hydrophobefireman/kit/hooks";
+import { SpinnerIcon } from "@hydrophobefireman/kit-icons";
+import { useResource } from "@hydrophobefireman/kit/hooks";
 
-import {previewImg} from "./preview.style";
-import {useBlurHashDecode} from "./use-blurhash";
+import { previewImg } from "./preview.style";
+import { useBlurHashDecode } from "./use-blurhash";
 
 const cache = new Map<string, Blob>();
 const DEFAULT_RES = {
@@ -26,7 +26,6 @@ function downloadPreview(
   meta: PreviewEncryptionMetadata
 ) {
   if (cache.has(url) && ENABLE_CACHE) {
-    // console.log("[cache] hit for:", url);
     return {
       ...DEFAULT_RES,
       result: Promise.resolve({data: cache.get(url)}),

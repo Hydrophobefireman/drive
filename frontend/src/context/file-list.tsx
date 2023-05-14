@@ -1,19 +1,19 @@
-import {createState} from "statedrive";
-import {DelayedRender} from "~/components/DelayedRender";
-import {dec_string} from "~/crypto/string_enc";
-import {getFileList} from "~/handlers/files";
-import {FileListResponse, FileMetadata} from "~/types/files";
-import {useAuthState} from "~/util/bridge";
-import {cloneObject} from "~/util/clone";
+import { createState } from "statedrive";
+import { DelayedRender } from "~/components/DelayedRender";
+import { dec_string } from "~/crypto/string_enc";
+import { getFileList } from "~/handlers/files";
+import { FileListResponse, FileMetadata } from "~/types/files";
+import { useAuthState } from "~/util/bridge";
+import { cloneObject } from "~/util/clone";
 
 import {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
+    createContext,
+    useContext,
+    useEffect,
+    useState
 } from "@hydrophobefireman/ui-lib";
-import {useCachingResource} from "@kit/hooks";
-import {Modal} from "@kit/modal";
+import { useCachingResource } from "@kit/hooks";
+import { Modal } from "@kit/modal";
 
 const unencryptedContext = createContext<{
   fileList: FileMetadata[];

@@ -1,10 +1,10 @@
-import {css} from "catom";
-import {uploadManager} from "~/handlers/managers/file-upload-manager";
-import {useFileUploadPreference} from "~/signals/file-signals";
+import { css } from "catom";
+import { uploadManager } from "~/handlers/managers/file-upload-manager";
+import { useFileUploadPreference } from "~/signals/file-signals";
 
-import {useMedia} from "@hydrophobefireman/kit/hooks";
-import {Box} from "@kit/container";
-import {Switch} from "@kit/input";
+import { useMedia } from "@hydrophobefireman/kit/hooks";
+import { Box } from "@kit/container";
+import { Switch } from "@kit/input";
 
 export function GlobalEncryptionState() {
   useFileUploadPreference();

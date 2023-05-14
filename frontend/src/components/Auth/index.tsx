@@ -1,14 +1,15 @@
-import {css} from "catom";
+import { css } from "catom";
 
-import {useMemo} from "@hydrophobefireman/ui-lib";
-import {Box} from "@kit/container";
-import {useLocation} from "@kit/hooks";
-import {Text} from "@kit/text";
+import { redirect, useMemo } from "@hydrophobefireman/ui-lib";
+import { Box } from "@kit/container";
+import { useLocation } from "@kit/hooks";
+import { Text } from "@kit/text";
 
-import {Login} from "./Login";
-import {Register} from "./Register";
+import { SwitchUsersContent } from "../SwitchUsers";
+import { Login } from "./Login";
+import { Register } from "./Register";
 
-export function Auth() {
+export function Auth({addingNew}: {addingNew?: boolean}) {
   const location = useLocation();
 
   const params = useMemo(() => new URLSearchParams(location.qs), [location.qs]);
@@ -17,7 +18,17 @@ export function Auth() {
 
   return (
     <Box>
-      {mode === "login" ? <Login /> : <Register />}
+      {mode === "login" ? (
+        <Login addingNew={addingNew} />
+      ) : (
+        <Register addingNew={addingNew} />
+      )}
+      <div class={css({marginTop: "2rem"})}>You are also logged in as</div>
+      <SwitchUsersContent
+        close={() => {
+          redirect("/app");
+        }}
+      />
       <Disclosure />
     </Box>
   );

@@ -1,17 +1,18 @@
-import {css} from "catom";
-import {revokeIntegrityToken} from "~/handlers/auth";
-import {pointerEventsNone} from "~/style";
-import {client} from "~/util/bridge";
+import { css } from "catom";
+import { revokeIntegrityToken } from "~/handlers/auth";
+import { pointerEventsNone } from "~/style";
+import { client, useAuthState } from "~/util/bridge";
 
-import {useRef, useState} from "@hydrophobefireman/ui-lib";
-import {Box} from "@kit/container";
-import {Dropdown} from "@kit/dropdown";
-import {UserCircleIcon} from "@kit/icons";
+import { useRef, useState } from "@hydrophobefireman/ui-lib";
+import { Box } from "@kit/container";
+import { Dropdown } from "@kit/dropdown";
+import { UserCircleIcon } from "@kit/icons";
 
+import { SwitchUsers } from "../SwitchUsers";
 import {
-  navActionButtonCls,
-  navDropdownContainerCls,
-  profileButtonCls,
+    navActionButtonCls,
+    navDropdownContainerCls,
+    profileButtonCls
 } from "./nav.style";
 
 export function Nav() {
@@ -21,25 +22,32 @@ export function Nav() {
   }
   const dropdownParentRef = useRef<HTMLElement>();
   const dropdownSiblingRef = useRef<HTMLButtonElement>();
-  async function handleLogout(e: JSX.TargetedMouseEvent<HTMLButtonElement>) {
+  const [switchUsers, setSwitchUsers] = useState(false);
+  async function handleNavAction(e: JSX.TargetedMouseEvent<HTMLButtonElement>) {
     const {
       currentTarget: {
         dataset: {action},
       },
     } = e;
-
+    setOpen(false);
     if (action === "logout:all") {
       await revokeIntegrityToken().result;
     }
-    client.logout();
+    if (action === "logout") client.logoutCurrent();
+
+    if (action === "auth:switch") setSwitchUsers(true);
   }
+  const [auth] = useAuthState();
   return (
     <Box
+      row
       ref={dropdownParentRef}
       element="nav"
-      horizontal="right"
+      style={{"--kit-justify-content": "space-between"}}
       class={css({padding: "0.5rem"})}
     >
+      <SwitchUsers close={() => setSwitchUsers(false)} active={switchUsers} />
+      <span>Hi {auth?.user}</span>
       <button
         ref={dropdownSiblingRef}
         class={profileButtonCls}
@@ -56,14 +64,22 @@ export function Nav() {
         <Box horizontal="right">
           <Box class={navDropdownContainerCls(isOpen)} horizontal="left">
             <button
-              onClick={handleLogout}
+              onClick={handleNavAction}
+              data-action="auth:switch"
+              class={navActionButtonCls}
+            >
+              switch users
+            </button>
+
+            <button
+              onClick={handleNavAction}
               data-action="logout"
               class={navActionButtonCls}
             >
               logout
             </button>
             <button
-              onClick={handleLogout}
+              onClick={handleNavAction}
               data-action="logout:all"
               class={navActionButtonCls}
             >

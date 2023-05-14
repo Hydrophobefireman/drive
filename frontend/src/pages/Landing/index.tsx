@@ -1,6 +1,6 @@
-import {useIsLoggedIn} from "~/util/bridge";
+import { useIsLoggedIn } from "~/util/bridge";
 
-import {redirect, useEffect} from "@hydrophobefireman/ui-lib";
+import { redirect, useEffect } from "@hydrophobefireman/ui-lib";
 
 export default function Landing() {
   const isLoggedIn = useIsLoggedIn();

@@ -1,11 +1,11 @@
-import {css} from "catom";
-import {FileMetadata} from "~/types/files";
+import { css } from "catom";
+import { FileMetadata } from "~/types/files";
 
-import {SpinnerIcon} from "@hydrophobefireman/kit-icons";
+import { SpinnerIcon } from "@hydrophobefireman/kit-icons";
 
-import {PreviewDecrypt} from "../FileListRenderer/PreviewRenderer/PreviewDecrypt";
-import {previewContainer, previewRoot, textCenter} from "./file-viewer.style";
-import {FileName} from "./index";
+import { PreviewDecrypt } from "../FileListRenderer/PreviewRenderer/PreviewDecrypt";
+import { previewContainer, previewRoot, textCenter } from "./file-viewer.style";
+import { FileName } from "./index";
 
 export function UnknownSpinner({
   file,

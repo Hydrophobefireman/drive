@@ -1,23 +1,21 @@
-import {css} from "catom";
-import {uploadManager} from "~/handlers/managers/file-upload-manager";
-import {FileUploadTask} from "~/handlers/tasks/file-upload-task";
-import {useFileUploadPreference} from "~/signals/file-signals";
+import { css } from "catom";
+import { uploadManager } from "~/handlers/managers/file-upload-manager";
+import { FileUploadTask } from "~/handlers/tasks/file-upload-task";
+import { useFileUploadPreference } from "~/signals/file-signals";
 
-import {_collectors} from "@hydrophobefireman/lazy";
-import {TextButton} from "@kit/button";
-import {Box} from "@kit/container";
-import {LockClosedIcon, LockOpenIcon, XIcon} from "@kit/icons";
-import {Input, Switch} from "@kit/input";
-import {Modal} from "@kit/modal";
+import { _collectors } from "@hydrophobefireman/lazy";
+import { TextButton } from "@kit/button";
+import { Box } from "@kit/container";
+import { LockClosedIcon, LockOpenIcon, XIcon } from "@kit/icons";
+import { Input, Switch } from "@kit/input";
+import { Modal } from "@kit/modal";
 
-import {PreviewBlob} from "../PreviewBlob";
-import {GlobalEncryptionState} from "./GlobalEncryptionState";
+import { PreviewBlob } from "../PreviewBlob";
+import { GlobalEncryptionState } from "./GlobalEncryptionState";
 import {
-  fileTitleCls,
-  previewBlobWrapper,
-  uploadItemCls,
-  uploaderRootGrid,
-  uploaderRootModal,
+    fileTitleCls,
+    previewBlobWrapper, uploaderRootGrid,
+    uploaderRootModal, uploadItemCls
 } from "./uploader.style";
 
 const {ARRAY_COLLECTOR} = _collectors;

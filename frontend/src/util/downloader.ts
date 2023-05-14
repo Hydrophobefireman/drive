@@ -1,8 +1,8 @@
-import {decrypt} from "~/crypto/decrypt";
-import {publicFileURL} from "~/handlers/routes";
-import {FileMetadata} from "~/types/files";
+import { decrypt } from "~/crypto/decrypt";
+import { publicFileURL } from "~/handlers/routes";
+import { FileMetadata } from "~/types/files";
 
-import {requests} from "./bridge";
+import { requests } from "./bridge";
 
 export interface Callbacks {
   onBuf?(obj: {received: number; total: number; chunk: Uint8Array}): void;
@@ -20,9 +20,8 @@ export async function decryptionDownloader(
   const {onBuf, onDecryptStart, onError, onReceivedAbortController, onResult} =
     callbacks;
   const {unencryptedUpload} = file.customMetadata.upload;
-  const {controller, result} = requests.getBinaryStram(
+  const {controller, result} = requests.getBinaryStream(
     publicFileURL(file.key),
-    null,
     null,
     onBuf
   );

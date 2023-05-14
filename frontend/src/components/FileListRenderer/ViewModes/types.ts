@@ -1,4 +1,4 @@
-import {FileMetadata} from "~/types/files";
+import { FileMetadata } from "~/types/files";
 
 export interface ViewItem {
   keys: string;

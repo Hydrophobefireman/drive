@@ -1,16 +1,20 @@
-import {css} from "catom";
-import {Auth} from "~/components/Auth";
-import {useIsLoggedIn} from "~/util/bridge";
+import { css } from "catom";
+import { Auth } from "~/components/Auth";
+import { useIsLoggedIn } from "~/util/bridge";
 
-import {redirect, useEffect} from "@hydrophobefireman/ui-lib";
-import {Box} from "@kit/container";
-import {Text} from "@kit/text";
+import { useLocation } from "@hydrophobefireman/kit/hooks";
+import { redirect, useEffect, useMemo } from "@hydrophobefireman/ui-lib";
+import { Box } from "@kit/container";
+import { Text } from "@kit/text";
 
 export default function Landing() {
   const isLoggedIn = useIsLoggedIn();
+  const location = useLocation();
+  const params = useMemo(() => new URLSearchParams(location.qs), [location.qs]);
+  const isNew: boolean = params.has("new");
   useEffect(() => {
-    if (isLoggedIn) return redirect("/app");
-  }, [isLoggedIn]);
+    if (isLoggedIn && !isNew) return redirect("/app");
+  }, [isLoggedIn, isNew]);
   return (
     <Box class={css({marginTop: "2rem"})}>
       <Text.h1

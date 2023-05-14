@@ -1,10 +1,7 @@
-import {decrypt} from "~/crypto/decrypt";
-import {FileMetadata} from "~/types/files";
-import {requests} from "~/util/bridge";
-import {decryptionDownloader} from "~/util/downloader";
+import { FileMetadata } from "~/types/files";
+import { decryptionDownloader } from "~/util/downloader";
 
-import {DownloadManager} from "../managers/file-download-manager";
-import {publicFileURL} from "../routes";
+import { DownloadManager } from "../managers/file-download-manager";
 
 export class FileDownloadTask {
   public status: "DOWNLOADING" | "DECRYPTING" | "PENDING" | "DONE" | "ERROR" =

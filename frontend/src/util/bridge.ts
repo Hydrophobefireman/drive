@@ -1,32 +1,40 @@
-import {set} from "statedrive";
+import { set } from "statedrive";
 import {
-  initialAuthCheckRoute,
-  loginRoute,
-  refreshTokenRoute,
+    initialAuthCheckRoute,
+    loginRoute,
+    refreshTokenRoute
 } from "~/handlers/routes";
-import {accountKeyStore} from "~/store/account-key-store";
-import {User} from "~/types/user";
+import { accountKeyStore } from "~/store/account-key-store";
+import { User } from "~/types/user";
 
-import {Bridge, clear} from "@hydrophobefireman/flask-jwt-jskit";
+import { AuthBridge } from "@hydrophobefireman/flask-jwt-jskit";
 
-const client = new Bridge<User>(null);
+import {
+    fetchCurrentAccountKey,
+    removeUnknownKeys
+} from "./update-account-key-state";
+
+const client = new AuthBridge<User>().withDefaultBackingStore();
 
 // change these according to your backend
-client.setRoutes({
+client.routes = {
   loginRoute,
   refreshTokenRoute,
   initialAuthCheckRoute,
-});
-client.onLogout(async () => {
+};
+client.onLogout = async () => {
+  await removeUnknownKeys();
   set(accountKeyStore, null);
-  sessionStorage.clear();
-  await clear();
   document.body.textContent = "";
   location.href = "/";
-});
-
-const {useAuthState, useIsLoggedIn} = client.getHooks();
-
+};
+client.onAuthUserSwitch = async () => {
+  fetchCurrentAccountKey();
+};
+const {useCurrentAuthState, useIsLoggedIn, useAllAuthState} = client.getHooks();
 const requests = client.getHttpClient();
-
-export {useAuthState, useIsLoggedIn, requests, client};
+const useAuthState = () => {
+  const currentAuth = useCurrentAuthState();
+  return [currentAuth[0]?.auth, currentAuth[1]] as const;
+};
+export { useAuthState, useIsLoggedIn, useAllAuthState, requests, client };

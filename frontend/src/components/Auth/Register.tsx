@@ -1,20 +1,20 @@
-import {css} from "catom";
-import {register} from "~/handlers/auth";
-import {useCancellableControllerRef} from "~/hooks/use-cancellable-controller";
-import {useLogin} from "~/hooks/use-login";
-import {User} from "~/types/user";
-import {generateAccountKey} from "~/util/generate-account-key";
+import { css } from "catom";
+import { register } from "~/handlers/auth";
+import { useCancellableControllerRef } from "~/hooks/use-cancellable-controller";
+import { useLogin } from "~/hooks/use-login";
+import { User } from "~/types/user";
+import { generateAccountKey } from "~/util/generate-account-key";
 
-import {A, useState} from "@hydrophobefireman/ui-lib";
-import {useAlerts} from "@kit/alerts";
-import {TextButton} from "@kit/button";
-import {Box} from "@kit/container";
+import { A, useState } from "@hydrophobefireman/ui-lib";
+import { useAlerts } from "@kit/alerts";
+import { TextButton } from "@kit/button";
+import { Box } from "@kit/container";
 
-import {Form} from "../Form";
-import {ThemeInput} from "../ThemeInput";
-import {RegisterSuccessModal} from "./RegisterSuccessModal";
+import { Form } from "../Form";
+import { ThemeInput } from "../ThemeInput";
+import { RegisterSuccessModal } from "./RegisterSuccessModal";
 
-export function Register() {
+export function Register({addingNew}: {addingNew?: boolean}) {
   const [username, setUsername] = useState("");
   const [formState, setFormState] = useState<"idle" | "pending" | "registered">(
     "idle"
@@ -84,7 +84,10 @@ export function Register() {
           </div>
         </Box>
         <Box horizontal="left">
-          <A class={css({textDecoration: "underline"})} href="/auth?mode=login">
+          <A
+            class={css({textDecoration: "underline"})}
+            href="/auth?mode=login&new=true"
+          >
             Login
           </A>
         </Box>

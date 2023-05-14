@@ -1,6 +1,6 @@
-import {requests} from "~/util/bridge";
+import { requests } from "~/util/bridge";
 
-import {signUrlRoute} from "./routes";
+import { signUrlRoute } from "./routes";
 
 export function requestSignedURL({
   file,

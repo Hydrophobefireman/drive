@@ -1,6 +1,6 @@
-import {css} from "catom";
+import { css } from "catom";
 
-import {useEffect, useState} from "@hydrophobefireman/ui-lib";
+import { useEffect, useState } from "@hydrophobefireman/ui-lib";
 
 export function PreviewText({url}: {url: string}) {
   const [text, setText] = useState("");

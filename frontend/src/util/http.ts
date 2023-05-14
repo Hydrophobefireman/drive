@@ -1,3 +1,3 @@
-import {requests} from "./bridge";
+import { requests } from "./bridge";
 
-export {requests};
+export { requests };

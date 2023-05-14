@@ -1,4 +1,4 @@
-import {useLayoutEffect, useState} from "@hydrophobefireman/ui-lib";
+import { useLayoutEffect, useState } from "@hydrophobefireman/ui-lib";
 const empty: any = [null, null];
 export function useObjectUrl(file: Blob) {
   const [res, setRes] = useState<[string, string]>(empty);

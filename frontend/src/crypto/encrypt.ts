@@ -1,7 +1,7 @@
-import {arrayBufferToBase64} from "@hydrophobefireman/j-utils";
+import { arrayBufferToBase64 } from "@hydrophobefireman/j-utils";
 
-import {API_VERSION} from "./constants";
-import {EncData, enc_string, generateKey} from "./util";
+import { API_VERSION } from "./constants";
+import { EncData, enc_string, generateKey } from "./util";
 
 export async function encrypt(
   file: ArrayBuffer,

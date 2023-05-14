@@ -1,16 +1,15 @@
-import {css} from "catom";
-import {ACCOUNT_SESSION_STORAGE_KEY} from "~/store/account-key-store";
-import {client} from "~/util/bridge";
+import { css } from "catom";
+import { client } from "~/util/bridge";
+import { updateAccountKeyState } from "~/util/update-account-key-state";
 
-import {set} from "@hydrophobefireman/flask-jwt-jskit";
-import {useState} from "@hydrophobefireman/ui-lib";
-import {TextButton} from "@kit/button";
-import {Box} from "@kit/container";
-import {Checkbox, Input, useCheckbox} from "@kit/input";
-import {Modal} from "@kit/modal";
-import {Text} from "@kit/text";
+import { useState } from "@hydrophobefireman/ui-lib";
+import { TextButton } from "@kit/button";
+import { Box } from "@kit/container";
+import { Checkbox, Input, useCheckbox } from "@kit/input";
+import { Modal } from "@kit/modal";
+import { Text } from "@kit/text";
 
-import {Form} from "../Form";
+import { Form } from "../Form";
 
 export function GetAccKey({setKey}: {setKey(k: string): void}) {
   const [localKey, _setKey] = useState("");
@@ -23,14 +22,14 @@ export function GetAccKey({setKey}: {setKey(k: string): void}) {
         <Text class={css({marginBottom: ".5rem"})}>
           Your account key is needed to encrypt and decrypt your files for{" "}
           <span class={css({textDecoration: "underline"})}>
-            {client.getState()?.user ?? "your account"}
+            {client.getCurrentAuthenticatedUser()?.user ?? "your account"}
           </span>
         </Text>
         <Form
-          onSubmit={() => {
+          onSubmit={async () => {
             setKey(localKey);
             if (checked) {
-              set(ACCOUNT_SESSION_STORAGE_KEY, localKey);
+              updateAccountKeyState(localKey);
             }
           }}
         >
@@ -52,7 +51,7 @@ export function GetAccKey({setKey}: {setKey(k: string): void}) {
           <Box row>
             <TextButton
               onClick={() => {
-                client.logout();
+                client.logoutCurrent();
               }}
               type="button"
               class={css({

@@ -1,13 +1,13 @@
-import {encrypt} from "~/crypto/encrypt";
-import {amzHeaders} from "~/util/amz-headers";
-import {blobToArrayBuffer} from "~/util/blob-to-array-buffer";
-import {client} from "~/util/bridge";
+import { encrypt } from "~/crypto/encrypt";
+import { amzHeaders } from "~/util/amz-headers";
+import { blobToArrayBuffer } from "~/util/blob-to-array-buffer";
+import { client } from "~/util/bridge";
 
-import {deleteFiles} from "../files";
-import {UploadManager, uploadManager} from "../managers/file-upload-manager";
-import {uploadPreview} from "../preview-uploader";
-import {ProgressRequest} from "../progress-uploader";
-import {requestSignedURL} from "../r2";
+import { deleteFiles } from "../files";
+import { UploadManager, uploadManager } from "../managers/file-upload-manager";
+import { uploadPreview } from "../preview-uploader";
+import { ProgressRequest } from "../progress-uploader";
+import { requestSignedURL } from "../r2";
 
 export class FileUploadTask {
   public shouldEncrypt: boolean = true;
@@ -103,7 +103,7 @@ export class FileUploadTask {
     });
   }
   public async start() {
-    const user = client.getState()?.user;
+    const user = client.getCurrentAuthenticationScope().auth?.user;
     if (!user) {
       this.errorMessage = "Not authenticated";
       this.status = "ERROR";

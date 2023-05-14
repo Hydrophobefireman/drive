@@ -1,4 +1,4 @@
-import {Renderable, useEffect, useState} from "@hydrophobefireman/ui-lib";
+import { Renderable, useEffect, useState } from "@hydrophobefireman/ui-lib";
 
 interface PaginateProps<T> {
   atOnce: number;

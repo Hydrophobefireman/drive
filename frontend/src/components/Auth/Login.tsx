@@ -1,15 +1,15 @@
-import {css} from "catom";
-import {useLogin} from "~/hooks/use-login";
+import { css } from "catom";
+import { useLogin } from "~/hooks/use-login";
 
-import {A, useState} from "@hydrophobefireman/ui-lib";
-import {TextButton} from "@kit/button";
-import {Box} from "@kit/container";
-import {Checkbox, useCheckbox} from "@kit/input";
+import { A, useState } from "@hydrophobefireman/ui-lib";
+import { TextButton } from "@kit/button";
+import { Box } from "@kit/container";
+import { Checkbox, useCheckbox } from "@kit/input";
 
-import {Form} from "../Form";
-import {ThemeInput} from "../ThemeInput";
+import { Form } from "../Form";
+import { ThemeInput } from "../ThemeInput";
 
-export function Login() {
+export function Login({addingNew}: {addingNew?: boolean}) {
   const [username, setUsername] = useState("");
   const [accountKey, setAccountKey] = useState("");
   const {checked: saveKey, toggle} = useCheckbox(false);
@@ -59,7 +59,7 @@ export function Login() {
       <Box horizontal="left">
         <A
           class={css({textDecoration: "underline"})}
-          href="/auth?mode=register"
+          href="/auth?mode=register&new=true"
         >
           register
         </A>

@@ -1,13 +1,12 @@
-import {set} from "statedrive";
+import { set } from "statedrive";
 import {
-  ACCOUNT_SESSION_STORAGE_KEY,
-  accountKeyStore,
+    accountKeyStore
 } from "~/store/account-key-store";
-import {client} from "~/util/bridge";
+import { client } from "~/util/bridge";
+import { updateAccountKeyState } from "~/util/update-account-key-state";
 
-import {set as idbSet} from "@hydrophobefireman/flask-jwt-jskit";
-import {redirect} from "@hydrophobefireman/ui-lib";
-import {useAlerts} from "@kit/alerts";
+import { redirect } from "@hydrophobefireman/ui-lib";
+import { useAlerts } from "@kit/alerts";
 
 export function useLogin(setFormState: (a: "pending" | "idle") => void) {
   const {persist} = useAlerts();
@@ -27,7 +26,7 @@ export function useLogin(setFormState: (a: "pending" | "idle") => void) {
       });
     }
     if (saveKey) {
-      idbSet(ACCOUNT_SESSION_STORAGE_KEY, key);
+      updateAccountKeyState(key);
     }
     set(accountKeyStore, key);
     return redirect("/app");

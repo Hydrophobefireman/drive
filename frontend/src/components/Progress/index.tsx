@@ -1,6 +1,5 @@
-import {css} from "catom";
+import { css } from "catom";
 
-import {_util} from "@hydrophobefireman/kit";
 
 function Circle({percent}: {percent: number}) {
   const R = 40;

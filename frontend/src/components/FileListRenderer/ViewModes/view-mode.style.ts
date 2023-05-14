@@ -1,4 +1,4 @@
-import {css} from "catom";
+import { css } from "catom";
 
 export const gridMenuItemStyle = css({
   width: "100%",

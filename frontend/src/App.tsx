@@ -1,11 +1,11 @@
-import "@kit/styles";
 import "@kit/css-reset";
+import "@kit/styles";
 import "~/App.css";
 
-import {Router} from "~/_router";
-import {AppLoader} from "~/components/AppLoader";
+import { AppLoader } from "~/components/AppLoader";
+import { Router } from "~/_router";
 
-import {VNode, render} from "@hydrophobefireman/ui-lib";
+import { render, VNode } from "@hydrophobefireman/ui-lib";
 
 function App(): VNode {
   return (

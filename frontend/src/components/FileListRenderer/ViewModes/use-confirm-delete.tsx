@@ -1,13 +1,13 @@
-import {css} from "catom";
-import {useFileList} from "~/context/file-list";
-import {deleteFiles} from "~/handlers/files";
-import {FileMetadata} from "~/types/files";
-import {useAuthState} from "~/util/bridge";
+import { css } from "catom";
+import { useFileList } from "~/context/file-list";
+import { deleteFiles } from "~/handlers/files";
+import { FileMetadata } from "~/types/files";
+import { useAuthState } from "~/util/bridge";
 
-import {SpinnerIcon} from "@hydrophobefireman/kit-icons";
-import {useAlerts} from "@hydrophobefireman/kit/alerts";
-import {Modal} from "@hydrophobefireman/kit/modal";
-import {useState} from "@hydrophobefireman/ui-lib";
+import { SpinnerIcon } from "@hydrophobefireman/kit-icons";
+import { useAlerts } from "@hydrophobefireman/kit/alerts";
+import { Modal } from "@hydrophobefireman/kit/modal";
+import { useState } from "@hydrophobefireman/ui-lib";
 
 export function useConfirmDelete(file: FileMetadata) {
   const [user] = useAuthState();

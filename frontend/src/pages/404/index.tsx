@@ -1,4 +1,4 @@
-import {A, Router} from "@hydrophobefireman/ui-lib";
+import { A, Router } from "@hydrophobefireman/ui-lib";
 export function NotFound() {
   return (
     <div>

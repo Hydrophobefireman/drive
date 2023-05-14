@@ -1,6 +1,6 @@
-import {die} from "~/util/die";
+import { die } from "~/util/die";
 
-import {$Iterator} from "@hydrophobefireman/lazy";
+import { $Iterator } from "@hydrophobefireman/lazy";
 
 const encoder = new TextEncoder();
 const decoder = new TextDecoder();
