@@ -24,7 +24,7 @@ export function Auth({addingNew}: {addingNew?: boolean}) {
       ) : (
         <Register addingNew={addingNew} />
       )}
-      {all.users?.length > 0 && (
+      {all?.users?.length > 0 && (
         <>
           <div class={css({marginTop: "2rem"})}>You are also logged in as</div>
           <SwitchUsersContent
