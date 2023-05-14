@@ -1,4 +1,5 @@
 import {css} from "catom";
+import {useAllAuthState} from "~/util/bridge";
 
 import {redirect, useMemo} from "@hydrophobefireman/ui-lib";
 import {Box} from "@kit/container";
@@ -15,7 +16,7 @@ export function Auth({addingNew}: {addingNew?: boolean}) {
   const params = useMemo(() => new URLSearchParams(location.qs), [location.qs]);
   const mode: "register" | "login" =
     params.get("mode") === "register" ? "register" : "login";
-
+  const [all] = useAllAuthState();
   return (
     <Box>
       {mode === "login" ? (
@@ -23,12 +24,16 @@ export function Auth({addingNew}: {addingNew?: boolean}) {
       ) : (
         <Register addingNew={addingNew} />
       )}
-      <div class={css({marginTop: "2rem"})}>You are also logged in as</div>
-      <SwitchUsersContent
-        close={() => {
-          redirect("/app");
-        }}
-      />
+      {all.users?.length > 0 && (
+        <>
+          <div class={css({marginTop: "2rem"})}>You are also logged in as</div>
+          <SwitchUsersContent
+            close={() => {
+              redirect("/app");
+            }}
+          />
+        </>
+      )}
       <Disclosure />
     </Box>
   );
