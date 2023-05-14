@@ -1,7 +1,7 @@
-import { FileMetadata } from "~/types/files";
+import {FileMetadata} from "~/types/files";
 
-import { _util } from "@hydrophobefireman/kit";
-import { useEffect, useState } from "@hydrophobefireman/ui-lib";
+import {_util} from "@hydrophobefireman/kit";
+import {useEffect, useState} from "@hydrophobefireman/ui-lib";
 
 export function useFilteredFiles(fileList: FileMetadata[]) {
   const [filteredFiles, setFilteredFiles] = useState(() => fileList);

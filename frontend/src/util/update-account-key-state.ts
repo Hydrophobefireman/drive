@@ -1,11 +1,12 @@
-import { set } from "statedrive";
+import {set} from "statedrive";
 import {
-    accountKeyStore, ACCOUNT_SESSION_STORAGE_KEY
+  accountKeyStore,
+  ACCOUNT_SESSION_STORAGE_KEY,
 } from "~/store/account-key-store";
 
-import { get, set as idbSet } from "@hydrophobefireman/flask-jwt-jskit";
+import {get, set as idbSet} from "@hydrophobefireman/flask-jwt-jskit";
 
-import { client } from "./bridge";
+import {client} from "./bridge";
 
 export async function updateAccountKeyState(k: string) {
   const prev = (await get(ACCOUNT_SESSION_STORAGE_KEY)) || {};

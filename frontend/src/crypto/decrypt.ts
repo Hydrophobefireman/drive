@@ -1,5 +1,5 @@
-import { dec_string } from "./string_enc";
-import { EncData } from "./util";
+import {dec_string} from "./string_enc";
+import {EncData} from "./util";
 
 const LATEST_VERSION = "1";
 const decryptionFuncMap = {

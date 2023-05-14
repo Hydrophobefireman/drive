@@ -1,4 +1,4 @@
-import { css } from "catom";
+import {css} from "catom";
 
 export const fileRenderTitleBox = css({
   position: "absolute",

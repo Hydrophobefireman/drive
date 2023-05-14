@@ -1,9 +1,9 @@
-import { encrypt } from "~/crypto/encrypt";
-import { enc_string } from "~/crypto/string_enc";
-import { amzHeaders } from "~/util/amz-headers";
-import { blobToArrayBuffer } from "~/util/blob-to-array-buffer";
+import {encrypt} from "~/crypto/encrypt";
+import {enc_string} from "~/crypto/string_enc";
+import {amzHeaders} from "~/util/amz-headers";
+import {blobToArrayBuffer} from "~/util/blob-to-array-buffer";
 
-import { createThumbnail } from "./thumbnail";
+import {createThumbnail} from "./thumbnail";
 
 const PREVIEW_WIDTH = 300;
 export async function previewGenerator(file: File, keys: string) {

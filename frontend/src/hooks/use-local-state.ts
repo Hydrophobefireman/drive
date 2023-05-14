@@ -1,4 +1,4 @@
-import { useEffect, useState } from "@hydrophobefireman/ui-lib";
+import {useEffect, useState} from "@hydrophobefireman/ui-lib";
 
 export function useLocalState<T>(name: string, defaultV: T) {
   const [v, setV] = useState(() => {

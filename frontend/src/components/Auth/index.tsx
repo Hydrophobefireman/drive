@@ -1,13 +1,13 @@
-import { css } from "catom";
+import {css} from "catom";
 
-import { redirect, useMemo } from "@hydrophobefireman/ui-lib";
-import { Box } from "@kit/container";
-import { useLocation } from "@kit/hooks";
-import { Text } from "@kit/text";
+import {redirect, useMemo} from "@hydrophobefireman/ui-lib";
+import {Box} from "@kit/container";
+import {useLocation} from "@kit/hooks";
+import {Text} from "@kit/text";
 
-import { SwitchUsersContent } from "../SwitchUsers";
-import { Login } from "./Login";
-import { Register } from "./Register";
+import {SwitchUsersContent} from "../SwitchUsers";
+import {Login} from "./Login";
+import {Register} from "./Register";
 
 export function Auth({addingNew}: {addingNew?: boolean}) {
   const location = useLocation();

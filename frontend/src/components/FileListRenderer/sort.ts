@@ -1,4 +1,4 @@
-import { FileMetadata } from "~/types/files";
+import {FileMetadata} from "~/types/files";
 
 export const SORT_FUNCTIONS = {
   "a-z": (a: FileMetadata, b: FileMetadata) =>

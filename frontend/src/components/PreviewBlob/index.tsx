@@ -1,6 +1,6 @@
-import { useObjectUrl } from "~/hooks/use-object-url";
+import {useObjectUrl} from "~/hooks/use-object-url";
 
-import { PreviewURL } from "../PreviewURL";
+import {PreviewURL} from "../PreviewURL";
 
 export function PreviewBlob({blob}: {blob: Blob}) {
   const [url, type] = useObjectUrl(blob);

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "@hydrophobefireman/ui-lib";
+import {useEffect, useRef, useState} from "@hydrophobefireman/ui-lib";
 
 export function DelayedRender({
   children,

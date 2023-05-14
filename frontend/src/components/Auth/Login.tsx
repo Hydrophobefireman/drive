@@ -1,13 +1,13 @@
-import { css } from "catom";
-import { useLogin } from "~/hooks/use-login";
+import {css} from "catom";
+import {useLogin} from "~/hooks/use-login";
 
-import { A, useState } from "@hydrophobefireman/ui-lib";
-import { TextButton } from "@kit/button";
-import { Box } from "@kit/container";
-import { Checkbox, useCheckbox } from "@kit/input";
+import {A, useState} from "@hydrophobefireman/ui-lib";
+import {TextButton} from "@kit/button";
+import {Box} from "@kit/container";
+import {Checkbox, useCheckbox} from "@kit/input";
 
-import { Form } from "../Form";
-import { ThemeInput } from "../ThemeInput";
+import {Form} from "../Form";
+import {ThemeInput} from "../ThemeInput";
 
 export function Login({addingNew}: {addingNew?: boolean}) {
   const [username, setUsername] = useState("");

@@ -1,10 +1,10 @@
-import { css } from "catom";
-import { FileViewer } from "~/components/FileViewer";
-import { SafeLayout } from "~/components/SafeLayout";
-import { useFileList } from "~/context/file-list";
+import {css} from "catom";
+import {FileViewer} from "~/components/FileViewer";
+import {SafeLayout} from "~/components/SafeLayout";
+import {useFileList} from "~/context/file-list";
 
-import { useLocation } from "@hydrophobefireman/kit/hooks";
-import { A, loadURL, useMemo } from "@hydrophobefireman/ui-lib";
+import {useLocation} from "@hydrophobefireman/kit/hooks";
+import {A, loadURL, useMemo} from "@hydrophobefireman/ui-lib";
 
 function Viewer() {
   const {fileList} = useFileList();

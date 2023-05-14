@@ -1,23 +1,23 @@
-import { css } from "catom";
-import { downloadManager } from "~/handlers/managers/file-download-manager";
-import { publicFileURL } from "~/handlers/routes";
-import { FileDownloadTask } from "~/handlers/tasks/file-download-task";
-import { FileMetadata } from "~/types/files";
+import {css} from "catom";
+import {downloadManager} from "~/handlers/managers/file-download-manager";
+import {publicFileURL} from "~/handlers/routes";
+import {FileDownloadTask} from "~/handlers/tasks/file-download-task";
+import {FileMetadata} from "~/types/files";
 
 import {
-    ClipboardCopyIcon,
-    DownloadIcon,
-    ExternalLinkIcon,
-    TrashIcon
+  ClipboardCopyIcon,
+  DownloadIcon,
+  ExternalLinkIcon,
+  TrashIcon,
 } from "@hydrophobefireman/kit-icons";
-import { useAlerts } from "@hydrophobefireman/kit/alerts";
-import { useEffect, useRef } from "@hydrophobefireman/ui-lib";
-import { BottomSheet } from "@kit/bottom-sheet";
+import {useAlerts} from "@hydrophobefireman/kit/alerts";
+import {useEffect, useRef} from "@hydrophobefireman/ui-lib";
+import {BottomSheet} from "@kit/bottom-sheet";
 
 import {
-    gridMenuItemBox,
-    gridMenuItemStyle,
-    gridMenuList
+  gridMenuItemBox,
+  gridMenuItemStyle,
+  gridMenuList,
 } from "./view-mode.style";
 
 export function BottomSheetMenu({

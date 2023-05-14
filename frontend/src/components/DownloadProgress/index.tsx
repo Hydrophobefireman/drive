@@ -1,11 +1,11 @@
-import { downloadManager } from "~/handlers/managers/file-download-manager";
-import { useFileDownloadSignal } from "~/signals/file-signals";
+import {downloadManager} from "~/handlers/managers/file-download-manager";
+import {useFileDownloadSignal} from "~/signals/file-signals";
 
-import { DownloadIcon } from "@hydrophobefireman/kit-icons";
-import { useRerender } from "@hydrophobefireman/kit/hooks";
-import { _collectors } from "@hydrophobefireman/lazy";
+import {DownloadIcon} from "@hydrophobefireman/kit-icons";
+import {useRerender} from "@hydrophobefireman/kit/hooks";
+import {_collectors} from "@hydrophobefireman/lazy";
 
-import { Progress } from "../Progress";
+import {Progress} from "../Progress";
 
 export function DownloadProgress() {
   const rerender = useRerender();

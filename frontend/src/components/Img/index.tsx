@@ -1,4 +1,4 @@
-import { h, useCallback } from "@hydrophobefireman/ui-lib";
+import {h, useCallback} from "@hydrophobefireman/ui-lib";
 
 export function Img({
   remount,

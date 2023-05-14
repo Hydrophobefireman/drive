@@ -1,4 +1,4 @@
-import type { ComponentProps } from "@hydrophobefireman/ui-lib";
+import type {ComponentProps} from "@hydrophobefireman/ui-lib";
 export function Form(props: ComponentProps<"form">) {
   const {onSubmit: props$onSubmit, ...rest} = props;
   function handleSubmit(e: Event) {

@@ -1,4 +1,4 @@
-import { css } from "catom";
+import {css} from "catom";
 
 export function PDFRenderer({url}: {url: string}) {
   return (

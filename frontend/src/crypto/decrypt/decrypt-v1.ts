@@ -1,6 +1,6 @@
-import { base64ToArrayBuffer } from "@hydrophobefireman/j-utils";
+import {base64ToArrayBuffer} from "@hydrophobefireman/j-utils";
 
-import { EncData, generateKey } from "../util";
+import {EncData, generateKey} from "../util";
 
 export async function decrypt(p: EncData, password: string, meta: any) {
   try {

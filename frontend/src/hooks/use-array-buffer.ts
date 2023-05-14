@@ -1,5 +1,5 @@
-import { blobToArrayBuffer } from "@hydrophobefireman/j-utils";
-import { useEffect, useState } from "@hydrophobefireman/ui-lib";
+import {blobToArrayBuffer} from "@hydrophobefireman/j-utils";
+import {useEffect, useState} from "@hydrophobefireman/ui-lib";
 
 export function useArrayBuffer(file: Blob) {
   const [buf, setBuf] = useState<ArrayBuffer>();

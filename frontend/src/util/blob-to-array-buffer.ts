@@ -1,4 +1,4 @@
-import { blobToArrayBuffer as b2ab } from "@hydrophobefireman/j-utils";
+import {blobToArrayBuffer as b2ab} from "@hydrophobefireman/j-utils";
 
 const HAS_NATIVE_BLOB_TO_ARRAY_BUFFER =
   "arrayBuffer" in Blob.prototype &&

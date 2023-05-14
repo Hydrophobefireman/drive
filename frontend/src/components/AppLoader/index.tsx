@@ -1,8 +1,8 @@
-import { DelayedRender } from "~/components/DelayedRender";
-import { fetchCurrentAccountKey } from "~/util/update-account-key-state";
+import {DelayedRender} from "~/components/DelayedRender";
+import {fetchCurrentAccountKey} from "~/util/update-account-key-state";
 
-import { useState } from "@hydrophobefireman/ui-lib";
-import { useMount } from "@kit/hooks";
+import {useState} from "@hydrophobefireman/ui-lib";
+import {useMount} from "@kit/hooks";
 
 export function AppLoader({children}: {children?: any}) {
   const [synced, setSynced] = useState(false);

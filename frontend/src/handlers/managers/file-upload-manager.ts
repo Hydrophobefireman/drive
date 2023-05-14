@@ -1,14 +1,14 @@
-import { dispatchSignal } from "use-signal";
+import {dispatchSignal} from "use-signal";
 import {
-    fetchFilesSignal,
-    fileUploadPreferenceChanged
+  fetchFilesSignal,
+  fileUploadPreferenceChanged,
 } from "~/signals/file-signals";
-import { Queue } from "~/util/queue";
+import {Queue} from "~/util/queue";
 
-import { $Iterator, _collectors, _range } from "@hydrophobefireman/lazy";
+import {$Iterator, _collectors, _range} from "@hydrophobefireman/lazy";
 
-import { FileUploadTask } from "../tasks/file-upload-task";
-import { BaseManager } from "./base-manager";
+import {FileUploadTask} from "../tasks/file-upload-task";
+import {BaseManager} from "./base-manager";
 
 const {ARRAY_COLLECTOR} = _collectors;
 

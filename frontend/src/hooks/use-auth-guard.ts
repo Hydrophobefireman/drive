@@ -1,10 +1,10 @@
-import { useIsLoggedIn } from "~/util/bridge";
+import {useIsLoggedIn} from "~/util/bridge";
 
-import { redirect, useEffect } from "@hydrophobefireman/ui-lib";
+import {redirect, useEffect} from "@hydrophobefireman/ui-lib";
 
 function _useAuthGuard(next: string) {
   const isLoggedIn = useIsLoggedIn();
-  
+
   useEffect(() => {
     if (!isLoggedIn) {
       return redirect(`/?next=${next}`);

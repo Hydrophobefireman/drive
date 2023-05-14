@@ -1,11 +1,11 @@
-import { css } from "catom";
-import { User } from "~/types/user";
+import {css} from "catom";
+import {User} from "~/types/user";
 
-import { useAlerts } from "@kit/alerts";
-import { Button } from "@kit/button";
-import { ClipboardCopyIcon } from "@kit/icons";
-import { Modal } from "@kit/modal";
-import { Text } from "@kit/text";
+import {useAlerts} from "@kit/alerts";
+import {Button} from "@kit/button";
+import {ClipboardCopyIcon} from "@kit/icons";
+import {Modal} from "@kit/modal";
+import {Text} from "@kit/text";
 
 export function RegisterSuccessModal({
   registrationInfo,

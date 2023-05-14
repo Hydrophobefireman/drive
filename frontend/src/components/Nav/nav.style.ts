@@ -1,4 +1,4 @@
-import { css } from "catom";
+import {css} from "catom";
 
 export const profileButtonCls = css({
   padding: "0.5rem",

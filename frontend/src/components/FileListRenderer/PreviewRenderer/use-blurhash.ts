@@ -1,10 +1,10 @@
-import { decode } from "blurhash";
-import { FileMetadata } from "~/types/files";
-import { blob2B64 } from "~/util/blob-to-b64";
+import {decode} from "blurhash";
+import {FileMetadata} from "~/types/files";
+import {blob2B64} from "~/util/blob-to-b64";
 
-import { _util } from "@hydrophobefireman/kit";
-import { useLatestRef } from "@hydrophobefireman/kit/hooks";
-import { useEffect, useState } from "@hydrophobefireman/ui-lib";
+import {_util} from "@hydrophobefireman/kit";
+import {useLatestRef} from "@hydrophobefireman/kit/hooks";
+import {useEffect, useState} from "@hydrophobefireman/ui-lib";
 
 export interface BlurHashHookProps {
   accKey: string;

@@ -1,10 +1,10 @@
-import { css } from "catom";
-import { client, useAllAuthState } from "~/util/bridge";
+import {css} from "catom";
+import {client, useAllAuthState} from "~/util/bridge";
 
-import { PlusCircleIcon, UserCircleIcon } from "@hydrophobefireman/kit-icons";
-import { Button } from "@hydrophobefireman/kit/button";
-import { Modal } from "@hydrophobefireman/kit/modal";
-import { A } from "@hydrophobefireman/ui-lib";
+import {PlusCircleIcon, UserCircleIcon} from "@hydrophobefireman/kit-icons";
+import {Button} from "@hydrophobefireman/kit/button";
+import {Modal} from "@hydrophobefireman/kit/modal";
+import {A} from "@hydrophobefireman/ui-lib";
 
 const navActionButtonCls = css({
   borderRadius: "var(--kit-radius)",

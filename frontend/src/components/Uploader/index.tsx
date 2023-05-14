@@ -1,17 +1,17 @@
-import { css } from "catom";
-import { uploadManager } from "~/handlers/managers/file-upload-manager";
-import { FileUploadTask } from "~/handlers/tasks/file-upload-task";
-import { useAccountKeys } from "~/store/account-key-store";
-import { useAuthState } from "~/util/bridge";
-import { receiveFileUploads } from "~/util/receive-file-upload";
+import {css} from "catom";
+import {uploadManager} from "~/handlers/managers/file-upload-manager";
+import {FileUploadTask} from "~/handlers/tasks/file-upload-task";
+import {useAccountKeys} from "~/store/account-key-store";
+import {useAuthState} from "~/util/bridge";
+import {receiveFileUploads} from "~/util/receive-file-upload";
 
-import { TextButton } from "@kit/button";
-import { Box } from "@kit/container";
-import { useFileDropListener } from "@kit/hooks";
-import { PlusIcon } from "@kit/icons";
+import {TextButton} from "@kit/button";
+import {Box} from "@kit/container";
+import {useFileDropListener} from "@kit/hooks";
+import {PlusIcon} from "@kit/icons";
 
-import { FileUploadConfigModal } from "./FileUploadConfigModal";
-import { uploadBtn } from "./uploader.style";
+import {FileUploadConfigModal} from "./FileUploadConfigModal";
+import {uploadBtn} from "./uploader.style";
 
 export function Uploader() {
   const [keys] = useAccountKeys();

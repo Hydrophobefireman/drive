@@ -1,11 +1,11 @@
-import { css } from "catom";
-import { Auth } from "~/components/Auth";
-import { useIsLoggedIn } from "~/util/bridge";
+import {css} from "catom";
+import {Auth} from "~/components/Auth";
+import {useIsLoggedIn} from "~/util/bridge";
 
-import { useLocation } from "@hydrophobefireman/kit/hooks";
-import { redirect, useEffect, useMemo } from "@hydrophobefireman/ui-lib";
-import { Box } from "@kit/container";
-import { Text } from "@kit/text";
+import {useLocation} from "@hydrophobefireman/kit/hooks";
+import {redirect, useEffect, useMemo} from "@hydrophobefireman/ui-lib";
+import {Box} from "@kit/container";
+import {Text} from "@kit/text";
 
 export default function Landing() {
   const isLoggedIn = useIsLoggedIn();

@@ -1,12 +1,10 @@
-import { set } from "statedrive";
-import {
-    accountKeyStore
-} from "~/store/account-key-store";
-import { client } from "~/util/bridge";
-import { updateAccountKeyState } from "~/util/update-account-key-state";
+import {set} from "statedrive";
+import {accountKeyStore} from "~/store/account-key-store";
+import {client} from "~/util/bridge";
+import {updateAccountKeyState} from "~/util/update-account-key-state";
 
-import { redirect } from "@hydrophobefireman/ui-lib";
-import { useAlerts } from "@kit/alerts";
+import {redirect} from "@hydrophobefireman/ui-lib";
+import {useAlerts} from "@kit/alerts";
 
 export function useLogin(setFormState: (a: "pending" | "idle") => void) {
   const {persist} = useAlerts();

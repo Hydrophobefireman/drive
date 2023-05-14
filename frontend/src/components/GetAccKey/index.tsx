@@ -1,15 +1,15 @@
-import { css } from "catom";
-import { client } from "~/util/bridge";
-import { updateAccountKeyState } from "~/util/update-account-key-state";
+import {css} from "catom";
+import {client} from "~/util/bridge";
+import {updateAccountKeyState} from "~/util/update-account-key-state";
 
-import { useState } from "@hydrophobefireman/ui-lib";
-import { TextButton } from "@kit/button";
-import { Box } from "@kit/container";
-import { Checkbox, Input, useCheckbox } from "@kit/input";
-import { Modal } from "@kit/modal";
-import { Text } from "@kit/text";
+import {useState} from "@hydrophobefireman/ui-lib";
+import {TextButton} from "@kit/button";
+import {Box} from "@kit/container";
+import {Checkbox, Input, useCheckbox} from "@kit/input";
+import {Modal} from "@kit/modal";
+import {Text} from "@kit/text";
 
-import { Form } from "../Form";
+import {Form} from "../Form";
 
 export function GetAccKey({setKey}: {setKey(k: string): void}) {
   const [localKey, _setKey] = useState("");

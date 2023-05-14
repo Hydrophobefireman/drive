@@ -1,7 +1,7 @@
-import { User } from "~/types/user";
-import { requests } from "~/util/bridge";
+import {User} from "~/types/user";
+import {requests} from "~/util/bridge";
 
-import { registerRoute, revokeTokenRoute } from "./routes";
+import {registerRoute, revokeTokenRoute} from "./routes";
 
 export function register(user: string, accountKey: string) {
   return requests.postJSON<{

@@ -1,18 +1,18 @@
-import { css } from "catom";
-import { revokeIntegrityToken } from "~/handlers/auth";
-import { pointerEventsNone } from "~/style";
-import { client, useAuthState } from "~/util/bridge";
+import {css} from "catom";
+import {revokeIntegrityToken} from "~/handlers/auth";
+import {pointerEventsNone} from "~/style";
+import {client, useAuthState} from "~/util/bridge";
 
-import { useRef, useState } from "@hydrophobefireman/ui-lib";
-import { Box } from "@kit/container";
-import { Dropdown } from "@kit/dropdown";
-import { UserCircleIcon } from "@kit/icons";
+import {useRef, useState} from "@hydrophobefireman/ui-lib";
+import {Box} from "@kit/container";
+import {Dropdown} from "@kit/dropdown";
+import {UserCircleIcon} from "@kit/icons";
 
-import { SwitchUsers } from "../SwitchUsers";
+import {SwitchUsers} from "../SwitchUsers";
 import {
-    navActionButtonCls,
-    navDropdownContainerCls,
-    profileButtonCls
+  navActionButtonCls,
+  navDropdownContainerCls,
+  profileButtonCls,
 } from "./nav.style";
 
 export function Nav() {

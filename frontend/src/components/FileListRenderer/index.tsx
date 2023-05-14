@@ -1,44 +1,44 @@
-import { css } from "catom";
-import { useFileList } from "~/context/file-list";
-import { deleteFiles } from "~/handlers/files";
-import { downloadManager } from "~/handlers/managers/file-download-manager";
-import { FileDownloadTask } from "~/handlers/tasks/file-download-task";
-import { useLocalState } from "~/hooks/use-local-state";
-import { useFetchFileSignal } from "~/signals/file-signals";
-import { useAccountKeys } from "~/store/account-key-store";
-import { FileMetadata } from "~/types/files";
-import { useAuthState } from "~/util/bridge";
+import {css} from "catom";
+import {useFileList} from "~/context/file-list";
+import {deleteFiles} from "~/handlers/files";
+import {downloadManager} from "~/handlers/managers/file-download-manager";
+import {FileDownloadTask} from "~/handlers/tasks/file-download-task";
+import {useLocalState} from "~/hooks/use-local-state";
+import {useFetchFileSignal} from "~/signals/file-signals";
+import {useAccountKeys} from "~/store/account-key-store";
+import {FileMetadata} from "~/types/files";
+import {useAuthState} from "~/util/bridge";
 
-import { _util } from "@hydrophobefireman/kit";
-import { SpinnerIcon } from "@hydrophobefireman/kit-icons";
-import { useAlerts } from "@hydrophobefireman/kit/alerts";
-import { TextButton } from "@hydrophobefireman/kit/button";
-import { Box } from "@hydrophobefireman/kit/container";
-import { useMedia } from "@hydrophobefireman/kit/hooks";
-import { Input } from "@hydrophobefireman/kit/input";
-import { Modal } from "@hydrophobefireman/kit/modal";
-import { Select } from "@hydrophobefireman/kit/select";
-import { $Iterator, _collectors } from "@hydrophobefireman/lazy";
+import {_util} from "@hydrophobefireman/kit";
+import {SpinnerIcon} from "@hydrophobefireman/kit-icons";
+import {useAlerts} from "@hydrophobefireman/kit/alerts";
+import {TextButton} from "@hydrophobefireman/kit/button";
+import {Box} from "@hydrophobefireman/kit/container";
+import {useMedia} from "@hydrophobefireman/kit/hooks";
+import {Input} from "@hydrophobefireman/kit/input";
+import {Modal} from "@hydrophobefireman/kit/modal";
+import {Select} from "@hydrophobefireman/kit/select";
+import {$Iterator, _collectors} from "@hydrophobefireman/lazy";
 import {
-    Renderable,
-    useEffect,
-    useMemo,
-    useReducer,
-    useState
+  Renderable,
+  useEffect,
+  useMemo,
+  useReducer,
+  useState,
 } from "@hydrophobefireman/ui-lib";
 
-import { FileViewer } from "../FileViewer";
-import { Paginate } from "../Paginate/Paginate";
+import {FileViewer} from "../FileViewer";
+import {Paginate} from "../Paginate/Paginate";
 import {
-    buttonWrapperClass,
-    fileRenderGrid,
-    fileSelectedActionBox
+  buttonWrapperClass,
+  fileRenderGrid,
+  fileSelectedActionBox,
 } from "./file-renderer.style";
-import { SortFns, SORT_FUNCTIONS, SORT_OPTIONS } from "./sort";
-import { useFileSelection } from "./use-file-selections";
-import { useFilteredFiles } from "./use-filtered-files";
-import { GridItem } from "./ViewModes/GridItem";
-import { ListItem } from "./ViewModes/ListItem";
+import {SortFns, SORT_FUNCTIONS, SORT_OPTIONS} from "./sort";
+import {useFileSelection} from "./use-file-selections";
+import {useFilteredFiles} from "./use-filtered-files";
+import {GridItem} from "./ViewModes/GridItem";
+import {ListItem} from "./ViewModes/ListItem";
 
 const {ARRAY_COLLECTOR} = _collectors;
 export function FileListRenderer() {

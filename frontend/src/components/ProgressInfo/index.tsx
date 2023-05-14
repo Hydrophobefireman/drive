@@ -1,7 +1,7 @@
-import { css } from "catom";
+import {css} from "catom";
 
-import { DownloadProgress } from "../DownloadProgress";
-import { UploadProgress } from "../UploadProgress";
+import {DownloadProgress} from "../DownloadProgress";
+import {UploadProgress} from "../UploadProgress";
 
 export function ProgressInfo() {
   return (

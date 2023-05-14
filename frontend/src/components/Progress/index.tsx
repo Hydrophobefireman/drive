@@ -1,5 +1,4 @@
-import { css } from "catom";
-
+import {css} from "catom";
 
 function Circle({percent}: {percent: number}) {
   const R = 40;

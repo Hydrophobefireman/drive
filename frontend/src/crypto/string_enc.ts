@@ -1,6 +1,6 @@
-import { die } from "~/util/die";
+import {die} from "~/util/die";
 
-import { $Iterator } from "@hydrophobefireman/lazy";
+import {$Iterator} from "@hydrophobefireman/lazy";
 
 const encoder = new TextEncoder();
 const decoder = new TextDecoder();
@@ -8,7 +8,6 @@ try {
   die(!!crypto.getRandomValues);
   die(!!crypto.subtle.decrypt);
   die(!!crypto.subtle.encrypt);
-  
 } catch (e) {
   alert("your browser does not support crypto apis required to run this app");
 }

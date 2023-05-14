@@ -1,7 +1,7 @@
-import { createSignal, Signal } from "use-signal";
-import { useSignal } from "use-signal/ui-lib";
+import {createSignal, Signal} from "use-signal";
+import {useSignal} from "use-signal/ui-lib";
 
-import { useRerender } from "@kit/hooks";
+import {useRerender} from "@kit/hooks";
 
 export const fileUploadPreferenceChanged: Signal = createSignal();
 export const fetchFilesSignal: Signal = createSignal();

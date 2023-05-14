@@ -1,6 +1,6 @@
-import { NotFound } from "~/pages/404";
+import {NotFound} from "~/pages/404";
 
-import { Router as KitRouter } from "@kit/router";
+import {Router as KitRouter} from "@kit/router";
 
 import routes from "./_routes";
 

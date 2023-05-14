@@ -1,11 +1,11 @@
 import {
-    DecryptedFileListProvider,
-    EncryptedFileListProvider
+  DecryptedFileListProvider,
+  EncryptedFileListProvider,
 } from "~/context/file-list";
-import { useAuthGuard } from "~/hooks/use-auth-guard";
-import { useAccountKeys } from "~/store/account-key-store";
+import {useAuthGuard} from "~/hooks/use-auth-guard";
+import {useAccountKeys} from "~/store/account-key-store";
 
-import { GetAccKey } from "../GetAccKey";
+import {GetAccKey} from "../GetAccKey";
 
 function Keys({children}: {children?: any}) {
   const [accKey, setKey] = useAccountKeys();

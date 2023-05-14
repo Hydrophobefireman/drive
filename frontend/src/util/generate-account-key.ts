@@ -1,4 +1,4 @@
-import { patchGlobalThis } from "@hydrophobefireman/j-utils";
+import {patchGlobalThis} from "@hydrophobefireman/j-utils";
 patchGlobalThis();
 
 const HAS_CRYPTO = Boolean(globalThis.crypto);
@@ -28,4 +28,4 @@ function generateAccountKey() {
   return buf2hex(crypto.getRandomValues(new Uint16Array(36)));
 }
 
-export { generateAccountKey, generateUUID };
+export {generateAccountKey, generateUUID};

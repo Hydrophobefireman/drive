@@ -1,10 +1,10 @@
-import { css } from "catom";
+import {css} from "catom";
 
-import { AudioRenderer } from "./Renderers/AudioRenderer";
-import { ImageRenderer } from "./Renderers/ImgRenderer";
-import { PDFRenderer } from "./Renderers/PDFRenderer";
-import { PreviewText } from "./Renderers/TextRenderer";
-import { VideoRenderer } from "./Renderers/VideoRenderer";
+import {AudioRenderer} from "./Renderers/AudioRenderer";
+import {ImageRenderer} from "./Renderers/ImgRenderer";
+import {PDFRenderer} from "./Renderers/PDFRenderer";
+import {PreviewText} from "./Renderers/TextRenderer";
+import {VideoRenderer} from "./Renderers/VideoRenderer";
 
 export function PreviewURL({type, url}: {url: string; type: string}) {
   if (type.includes("text")) return <PreviewText url={url} />;

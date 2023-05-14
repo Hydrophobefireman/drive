@@ -1,6 +1,6 @@
-import { css } from "catom";
-import { Img } from "~/components/Img";
-import { PreviewInit } from "~/types/preview";
+import {css} from "catom";
+import {Img} from "~/components/Img";
+import {PreviewInit} from "~/types/preview";
 
 export function DefaultPreviewRenderer(
   props: Omit<PreviewInit, "decryptionKeys"> & {decryptionKeys?: any}

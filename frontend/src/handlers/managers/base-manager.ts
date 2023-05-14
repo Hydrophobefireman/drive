@@ -1,4 +1,4 @@
-import { dispatchSignal, Signal } from "use-signal";
+import {dispatchSignal, Signal} from "use-signal";
 
 interface BaseNotification<T extends boolean = false> {
   changed: string;

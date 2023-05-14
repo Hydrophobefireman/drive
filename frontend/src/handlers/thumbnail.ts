@@ -1,4 +1,4 @@
-import { encode } from "blurhash";
+import {encode} from "blurhash";
 
 export interface ThumbResult {
   blob: Blob;

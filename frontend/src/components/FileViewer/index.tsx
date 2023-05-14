@@ -1,23 +1,23 @@
-import { css } from "catom";
-import { publicFileURL } from "~/handlers/routes";
-import { useCancellableControllerRef } from "~/hooks/use-cancellable-controller";
-import { useAccountKeys } from "~/store/account-key-store";
-import { FileMetadata } from "~/types/files";
-import { decryptionDownloader } from "~/util/downloader";
+import {css} from "catom";
+import {publicFileURL} from "~/handlers/routes";
+import {useCancellableControllerRef} from "~/hooks/use-cancellable-controller";
+import {useAccountKeys} from "~/store/account-key-store";
+import {FileMetadata} from "~/types/files";
+import {decryptionDownloader} from "~/util/downloader";
 
 import {
-    ChevronLeftIcon,
-    ChevronRightIcon,
-    XIcon
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  XIcon,
 } from "@hydrophobefireman/kit-icons";
-import { TextButton } from "@hydrophobefireman/kit/button";
-import { Box } from "@hydrophobefireman/kit/container";
-import { useEffect, useState } from "@hydrophobefireman/ui-lib";
+import {TextButton} from "@hydrophobefireman/kit/button";
+import {Box} from "@hydrophobefireman/kit/container";
+import {useEffect, useState} from "@hydrophobefireman/ui-lib";
 
-import { PreviewBlob } from "../PreviewBlob";
-import { PreviewURL } from "../PreviewURL";
-import { buttonsRoot, previewRoot, textCenter } from "./file-viewer.style";
-import { LoaderWithPreview, PreviewContainer, UnknownSpinner } from "./Viewers";
+import {PreviewBlob} from "../PreviewBlob";
+import {PreviewURL} from "../PreviewURL";
+import {buttonsRoot, previewRoot, textCenter} from "./file-viewer.style";
+import {LoaderWithPreview, PreviewContainer, UnknownSpinner} from "./Viewers";
 
 export function FileViewer({
   file,

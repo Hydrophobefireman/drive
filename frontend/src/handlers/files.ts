@@ -1,7 +1,7 @@
-import { FileListResponse } from "~/types/files";
-import { requests } from "~/util/bridge";
+import {FileListResponse} from "~/types/files";
+import {requests} from "~/util/bridge";
 
-import { batchDeleteRoute, listFilesRoute } from "./routes";
+import {batchDeleteRoute, listFilesRoute} from "./routes";
 
 export function getFileList(u: string) {
   const {controller, headers, result} = requests.get<FileListResponse>(

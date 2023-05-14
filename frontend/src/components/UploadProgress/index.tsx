@@ -1,12 +1,12 @@
-import { } from "@kit/dropdown";
+import {} from "@kit/dropdown";
 
-import { uploadManager } from "~/handlers/managers/file-upload-manager";
-import { useFileUploadPreference } from "~/signals/file-signals";
+import {uploadManager} from "~/handlers/managers/file-upload-manager";
+import {useFileUploadPreference} from "~/signals/file-signals";
 
-import { UploadIcon } from "@hydrophobefireman/kit-icons";
-import { _collectors } from "@hydrophobefireman/lazy";
+import {UploadIcon} from "@hydrophobefireman/kit-icons";
+import {_collectors} from "@hydrophobefireman/lazy";
 
-import { Progress } from "../Progress";
+import {Progress} from "../Progress";
 
 const {ARRAY_COLLECTOR} = _collectors;
 export function UploadProgress() {

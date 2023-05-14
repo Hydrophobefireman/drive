@@ -1,4 +1,4 @@
-import { FileMetadata } from "./files";
+import {FileMetadata} from "./files";
 
 export interface PreviewInit {
   file: FileMetadata;

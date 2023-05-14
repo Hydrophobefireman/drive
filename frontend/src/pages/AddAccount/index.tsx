@@ -1,8 +1,8 @@
-import { css } from "catom";
-import { Auth } from "~/components/Auth";
+import {css} from "catom";
+import {Auth} from "~/components/Auth";
 
-import { Box } from "@kit/container";
-import { Text } from "@kit/text";
+import {Box} from "@kit/container";
+import {Text} from "@kit/text";
 
 export default function AddAccount() {
   return (

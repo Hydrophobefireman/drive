@@ -20,8 +20,7 @@ export const refreshTokenRoute = getURL("/api/-/auth/refresh");
 export const initialAuthCheckRoute = getURL("/api/-/auth/me");
 
 export const listFilesRoute = (u: string) => getURL(`/api/user/${u}/list`);
-export const batchDeleteRoute = (u: string) =>
-  getURL(`/r2/${u}/batch-delete`);
+export const batchDeleteRoute = (u: string) => getURL(`/r2/${u}/batch-delete`);
 export const signUrlRoute = (file: string, method: string, u: string) =>
   getURL(
     `/r2/${encodeURIComponent(u)}/${encodeURIComponent(

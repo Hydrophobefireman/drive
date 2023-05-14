@@ -1,9 +1,9 @@
-import { FileMetadata } from "~/types/files";
-import { die } from "~/util/die";
+import {FileMetadata} from "~/types/files";
+import {die} from "~/util/die";
 
-import { useClickAway } from "@hydrophobefireman/kit/hooks";
-import { $Iterator, _range } from "@hydrophobefireman/lazy";
-import { useRef, useState } from "@hydrophobefireman/ui-lib";
+import {useClickAway} from "@hydrophobefireman/kit/hooks";
+import {$Iterator, _range} from "@hydrophobefireman/lazy";
+import {useRef, useState} from "@hydrophobefireman/ui-lib";
 
 const ignoreOutOfFocus = (x: unknown) =>
   x instanceof HTMLInputElement ||

@@ -1,9 +1,9 @@
-import { downloadFilesSignal } from "~/signals/file-signals";
+import {downloadFilesSignal} from "~/signals/file-signals";
 
-import { $Iterator } from "@hydrophobefireman/lazy";
+import {$Iterator} from "@hydrophobefireman/lazy";
 
-import { FileDownloadTask } from "../tasks/file-download-task";
-import { BaseManager } from "./base-manager";
+import {FileDownloadTask} from "../tasks/file-download-task";
+import {BaseManager} from "./base-manager";
 
 interface DownloadNotification<T extends boolean = false> {
   changed: "status" | "metadata";
