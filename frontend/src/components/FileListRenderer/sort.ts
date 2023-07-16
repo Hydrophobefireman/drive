@@ -7,6 +7,8 @@ export const SORT_FUNCTIONS = {
     -a.customMetadata.upload.name.localeCompare(b.customMetadata.upload.name),
   newest: (a: FileMetadata, b: FileMetadata) => -(+a.uploaded - +b.uploaded),
   oldest: (a: FileMetadata, b: FileMetadata) => +a.uploaded - +b.uploaded,
+  smallest: (a: FileMetadata, b: FileMetadata) => a.size - b.size,
+  biggest: (a: FileMetadata, b: FileMetadata) => -(a.size - b.size),
 };
 
 export const SORT_OPTIONS = Object.keys(SORT_FUNCTIONS).map((x) => ({
