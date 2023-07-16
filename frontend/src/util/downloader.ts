@@ -15,7 +15,7 @@ export interface Callbacks {
 export async function decryptionDownloader(
   file: FileMetadata,
   keys: string,
-  callbacks: Callbacks
+  callbacks: Callbacks,
 ) {
   const {onBuf, onDecryptStart, onError, onReceivedAbortController, onResult} =
     callbacks;
@@ -23,13 +23,14 @@ export async function decryptionDownloader(
   const {controller, result} = requests.getBinaryStream(
     publicFileURL(file.key),
     null,
-    onBuf
+    onBuf,
   );
   onReceivedAbortController?.(controller);
-  const buf = await result;
-  if ("error" in buf || !(buf instanceof ArrayBuffer)) {
-    return onError(buf as any);
+  let bufResult = await result;
+  if ("error" in bufResult || !(bufResult.data instanceof ArrayBuffer)) {
+    return onError(bufResult as any);
   }
+  const buf = bufResult.data;
 
   let resultBlob: Blob;
   if (unencryptedUpload) {
@@ -39,7 +40,7 @@ export async function decryptionDownloader(
     onDecryptStart?.();
     const res = await decrypt(
       {encryptedBuf: buf, meta: file.customMetadata.upload},
-      keys
+      keys,
     );
     if ("error" in res) {
       return onError?.(res);

@@ -35,7 +35,8 @@ export class FileDownloadTask {
         this.total = total;
         this.notifyStatusChange("DOWNLOADING");
       },
-      onError: () => {
+      onError: (e) => {
+        console.warn(e);
         this.notifyStatusChange("ERROR");
       },
       onDecryptStart: () => {
