@@ -11,6 +11,7 @@ import {
 import {Checkbox} from "@hydrophobefireman/kit/input";
 import {useRef} from "@hydrophobefireman/ui-lib";
 
+import {PreviewRenderer} from "../PreviewRenderer";
 import {
   actionContainer,
   checkboxCls,
@@ -20,7 +21,6 @@ import {
   fileRenderTitleBox,
   menuButtonContainer,
 } from "../file-renderer.style";
-import {PreviewRenderer} from "../PreviewRenderer";
 import {BottomSheetMenu, MenuButtons, PopupMenu} from "./Menus";
 import {ViewItem} from "./types";
 import {useConfirmDelete} from "./use-confirm-delete";

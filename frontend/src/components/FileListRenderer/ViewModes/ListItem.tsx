@@ -1,5 +1,6 @@
 import {css} from "catom";
 import {publicFileURL} from "~/handlers/routes";
+import {formatBytes} from "~/util/human-readable-bytes";
 
 import {_util} from "@hydrophobefireman/kit";
 import {DotsHorizontalIcon} from "@hydrophobefireman/kit-icons";
@@ -9,8 +10,10 @@ import {
   useToggleState,
 } from "@hydrophobefireman/kit/hooks";
 import {Checkbox} from "@hydrophobefireman/kit/input";
+import {Text} from "@hydrophobefireman/kit/text";
 import {useRef} from "@hydrophobefireman/ui-lib";
 
+import {DefaultPreviewRenderer} from "../PreviewRenderer/DefaultRenderer";
 import {
   listViewCheckbox,
   listViewCheckboxContainer,
@@ -19,7 +22,6 @@ import {
   listViewTime,
   menuButtonContainer,
 } from "../file-renderer.style";
-import {DefaultPreviewRenderer} from "../PreviewRenderer/DefaultRenderer";
 import {BottomSheetMenu, MenuButtons, PopupMenu} from "./Menus";
 import {ViewItem} from "./types";
 import {useConfirmDelete} from "./use-confirm-delete";
@@ -64,10 +66,11 @@ export function ListItem({
         )}
       </div>
       <div class={listViewName} data-click-target>
-        <span>
-          {file.customMetadata.upload.unencryptedUpload ? null : "🔒"}
-        </span>
-        <span>{file.customMetadata.upload.name}</span>
+        {file.customMetadata.upload.unencryptedUpload ? null : <span>🔒</span>}
+        <span>{file.customMetadata.upload.name}</span>{" "}
+        <Text.span size=".75rem" color="kit-shade-3">
+          {formatBytes(file.size)}
+        </Text.span>
       </div>
       <div class={listViewTime}>
         <span class="text">{formatter.format(file.uploaded)}</span>

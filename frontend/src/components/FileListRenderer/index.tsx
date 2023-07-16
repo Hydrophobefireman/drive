@@ -29,16 +29,16 @@ import {
 
 import {FileViewer} from "../FileViewer";
 import {Paginate} from "../Paginate/Paginate";
+import {GridItem} from "./ViewModes/GridItem";
+import {ListItem} from "./ViewModes/ListItem";
 import {
   buttonWrapperClass,
   fileRenderGrid,
   fileSelectedActionBox,
 } from "./file-renderer.style";
-import {SortFns, SORT_FUNCTIONS, SORT_OPTIONS} from "./sort";
+import {SORT_FUNCTIONS, SORT_OPTIONS, SortFns} from "./sort";
 import {useFileSelection} from "./use-file-selections";
 import {useFilteredFiles} from "./use-filtered-files";
-import {GridItem} from "./ViewModes/GridItem";
-import {ListItem} from "./ViewModes/ListItem";
 
 const {ARRAY_COLLECTOR} = _collectors;
 export function FileListRenderer() {

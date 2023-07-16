@@ -39,3 +39,19 @@ export const gridMenuList = css({
   transform: "scale(var(--scale))",
   transition: "var(--kit-transition)",
 });
+
+export const infoTable = css({borderCollapse: "collapse", width: "100%"});
+
+export const infoTableItem = css({
+  border: "1px solid #ddd",
+  maxWidth: "200px",
+  overflow: "hidden",
+  textOverflow: "ellipsis",
+});
+
+export const infoTableRow = [
+  infoTableItem,
+  css({
+    fontWeight: "bold",
+  }),
+].join(" ");
