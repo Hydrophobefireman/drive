@@ -3,9 +3,5 @@ function amzDate(url: string) {
 }
 
 export function amzHeaders(uploadUrl: string) {
-  return {
-    "x-amz-content-sha256": "UNSIGNED-PAYLOAD",
-    "x-amz-date": amzDate(uploadUrl),
-    "X-Amz-Algorithm": "AWS4-HMAC-SHA256",
-  };
+  return {};
 }

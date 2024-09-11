@@ -54,7 +54,7 @@ export class FileDownloadTask {
     });
   }
   public get progress() {
-    return (this.done ?? 0) / (this.total ?? this.file?.size) || 0;
+    return (this.done ?? 0) / (this.total ?? this.file?.size) || 1;
   }
   constructor(
     private file: FileMetadata,
