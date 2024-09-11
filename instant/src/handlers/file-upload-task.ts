@@ -96,7 +96,7 @@ export class FileUploadTask {
     binary = await blobToArrayBuffer(this.file);
     uploader.headers({
       "content-type": this.file.type,
-      ...amzHeaders(sign, {}),
+      ...amzHeaders(sign),
     });
 
     this.notifyStatusUpdate();

@@ -6,12 +6,15 @@ export function requestSignedURL({
   file,
   method = "PUT",
   user,
+  data,
 }: {
   file: string;
   method: "PUT" | "GET";
   user: string;
+  data: {previewMetadata: object; uploadMetadata: object};
 }) {
-  return requests.get<{url: string; preview: string; key: string}>(
-    signUrlRoute(file, method, user)
+  return requests.postJSON<{url: string; preview: string; key: string}>(
+    signUrlRoute(file, method, user),
+    data,
   );
 }

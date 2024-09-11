@@ -6,9 +6,13 @@ import {blobToArrayBuffer} from "~/util/blob-to-array-buffer";
 import {createThumbnail} from "./thumbnail";
 
 const PREVIEW_WIDTH = 300;
-export async function previewGenerator(file: File, keys: string) {
+export type GeneratedPreviewResult = readonly [ArrayBuffer, object];
+export async function previewGenerator(
+  file: File,
+  keys: string,
+): Promise<GeneratedPreviewResult> {
   const thumb = await createThumbnail(file, {width: PREVIEW_WIDTH});
-  if (!thumb) return [];
+  if (!thumb) return [null, null];
   const {blob, hash, meta} = thumb;
   const buf = await blobToArrayBuffer(blob);
   const {encryptedBuf, meta: encryptedMeta} = await encrypt(buf, keys, {
@@ -23,7 +27,7 @@ function sendToR2(
   data: RequestInit["body"],
   controller: AbortController,
   metadata: Record<string, any> = {},
-  headers: Record<string, string> = {}
+  headers: Record<string, string> = {},
 ) {
   return fetch(url, {
     method: "PUT",
@@ -37,15 +41,13 @@ function sendToR2(
 }
 
 export async function uploadPreview({
-  file,
-  keys,
+  previewResult,
   previewUploadURL,
 }: {
+  previewResult: GeneratedPreviewResult;
   previewUploadURL: string;
-  file: File;
-  keys: string;
 }) {
-  const [encryptedBuf, encryptedMeta] = await previewGenerator(file, keys);
+  const [encryptedBuf, encryptedMeta] = previewResult;
   if (!encryptedBuf) return {};
   const controller = new AbortController();
   const getResult = () =>

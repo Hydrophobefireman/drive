@@ -5,7 +5,11 @@ import {client} from "~/util/bridge";
 
 import {deleteFiles} from "../files";
 import {UploadManager, uploadManager} from "../managers/file-upload-manager";
-import {uploadPreview} from "../preview-uploader";
+import {
+  GeneratedPreviewResult,
+  previewGenerator,
+  uploadPreview,
+} from "../preview-uploader";
 import {ProgressRequest} from "../progress-uploader";
 import {requestSignedURL} from "../r2";
 
@@ -62,10 +66,12 @@ export class FileUploadTask {
     this.manager.notifyUpdate({actor: this, changed: "status"});
   }
 
-  private async handlePreview(previewUploadURL: string): Promise<boolean> {
+  private async handlePreview(
+    previewResult: GeneratedPreviewResult,
+    previewUploadURL: string,
+  ): Promise<boolean> {
     const {controller, getResult} = await uploadPreview({
-      file: this.file,
-      keys: this.encryptionKeys,
+      previewResult,
       previewUploadURL,
     });
     if (!getResult) return false;
@@ -113,15 +119,43 @@ export class FileUploadTask {
 
     this.status = "STARTED";
     const needs_preview = this.needsPreviews();
-    if (needs_preview) {
-      this.progressDetail = "UPLOADING_PREVIEW";
+
+    const previewGenerationResults = needs_preview
+      ? await previewGenerator(this.file, this.encryptionKeys)
+      : null;
+
+    let binary: RequestInit["body"];
+    let uploadMetadata: object;
+    if (this.shouldEncrypt) {
+      this.progressDetail = "ENCRYPTING";
+      this.notifyStatusUpdate();
+      const {encryptedBuf, meta} = await this._encrypt();
+      binary = encryptedBuf;
+      uploadMetadata = {
+        ...meta,
+        unencryptedUpload: false,
+        name: this.name,
+        contentType: this.file.type,
+      };
+    } else {
+      binary = this.file;
+      uploadMetadata = {
+        unencryptedUpload: true,
+        name: this.name,
+        contentType: this.file.type,
+      };
     }
-    this.notifyStatusUpdate();
+
     const {controller, result} = requestSignedURL({
       file: this.name,
       method: "PUT",
       user: user,
+      data: {
+        previewMetadata: previewGenerationResults[1],
+        uploadMetadata,
+      },
     });
+
     this.controller = controller;
     const resp = await result;
     if (resp.error) {
@@ -131,38 +165,30 @@ export class FileUploadTask {
       return;
     }
 
-    const {preview, url, key} = resp.data;
+    const {preview: previewUploadURL, url, key} = resp.data;
+    console.log(resp.data);
+
     this._key = key;
     const uploader = this.buildUploader(url);
     if (needs_preview) {
-      const hasPreview = await this.handlePreview(preview);
+      this.progressDetail = "UPLOADING_PREVIEW";
+      this.notifyStatusUpdate();
+      const hasPreview = await this.handlePreview(
+        previewGenerationResults,
+        previewUploadURL,
+      );
       if (!hasPreview) console.warn("Failed preview upload for ", this);
     }
 
-    let binary: RequestInit["body"];
     if (this.shouldEncrypt) {
-      this.progressDetail = "ENCRYPTING";
-      this.notifyStatusUpdate();
-      const {encryptedBuf, meta} = await this._encrypt();
-      binary = encryptedBuf;
       uploader.headers({
         "content-type": "application/octet-stream",
-        ...amzHeaders(url, {
-          ...meta,
-          unencryptedUpload: false,
-          name: this.name,
-          contentType: this.file.type,
-        }),
+        ...amzHeaders(url, uploadMetadata),
       });
     } else {
-      binary = this.file;
       uploader.headers({
         "content-type": this.file.type,
-        ...amzHeaders(url, {
-          unencryptedUpload: true,
-          name: this.name,
-          contentType: this.file.type,
-        }),
+        ...amzHeaders(url, uploadManager),
       });
     }
 
@@ -176,6 +202,6 @@ export class FileUploadTask {
     public file: File,
     private encryptionKeys: string,
     private userName: string,
-    private manager: UploadManager = uploadManager
+    private manager: UploadManager = uploadManager,
   ) {}
 }

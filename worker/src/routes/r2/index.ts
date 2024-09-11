@@ -10,24 +10,34 @@ import {uuid} from "~/util/uuid";
 const router = buildHono();
 
 // const cache = caches.default;
-router.get(
+router.post(
   "/:user/:file/:method/sign",
-  strictAuth({checkApproval: true}),
+  strictAuth<"/:user/:file/:method/sign">({checkApproval: true}),
   async (c) => {
     // console.log("[cache] clearing cache");
     // await cache.delete(cacheKey(c));
     const r2 = c.get("r2");
     const {file, method, user} = c.req.param();
+    const body = await c.req.json();
+
     const url = buildFilePath(user, `${uuid()}-${uuid()}`, file);
     return json({
       url: await signUrl(
         r2,
-        {path: url, bucket: CONFIG.PUBLIC_BUCKET_NAME},
+        {
+          path: url,
+          bucket: CONFIG.PUBLIC_BUCKET_NAME,
+          metadata: body.uploadMetadata,
+        },
         method
       ),
       preview: await signUrl(
         r2,
-        {path: url, bucket: CONFIG.PREVIEW_BUCKET_NAME},
+        {
+          path: url,
+          bucket: CONFIG.PREVIEW_BUCKET_NAME,
+          metadata: body.previewMetadata,
+        },
         method
       ),
       key: url,

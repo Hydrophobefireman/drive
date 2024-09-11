@@ -1,4 +1,4 @@
-export interface Env {
+export interface Env extends Record<string, any> {
   B_GALLERY: R2Bucket;
   B_PREVIEWS: R2Bucket;
   CHECK: "yes" | "no";
