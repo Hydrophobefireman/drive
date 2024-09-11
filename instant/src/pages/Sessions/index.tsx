@@ -248,6 +248,9 @@ export default function Session() {
               >
                 {pathRef.current}
               </button>
+              <div>
+                <Qr text={pathRef.current} />
+              </div>
               <Modal.Actions
                 class={css({
                   display: "grid",
