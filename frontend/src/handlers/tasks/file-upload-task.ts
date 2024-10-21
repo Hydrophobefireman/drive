@@ -151,7 +151,7 @@ export class FileUploadTask {
       method: "PUT",
       user: user,
       data: {
-        previewMetadata: previewGenerationResults[1],
+        previewMetadata: previewGenerationResults?.[1],
         uploadMetadata,
       },
     });

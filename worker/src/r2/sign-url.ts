@@ -26,5 +26,9 @@ export async function signUrl(
           ...conf,
           Metadata: {upload: JSON.stringify(config.metadata)},
         } satisfies PutObjectCommandInput);
-  return await getSignedUrl(r2, cmd, {expiresIn: SEVEN_DAYS});
+
+  return await getSignedUrl(r2, cmd, {
+    expiresIn: SEVEN_DAYS,
+    unhoistableHeaders: new Set(["x-amz-meta-upload"]),
+  });
 }

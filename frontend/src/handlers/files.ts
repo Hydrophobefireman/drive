@@ -5,14 +5,16 @@ import {batchDeleteRoute, listFilesRoute} from "./routes";
 
 export function getFileList(u: string) {
   const {controller, headers, result} = requests.get<FileListResponse>(
-    listFilesRoute(u)
+    listFilesRoute(u),
   );
   return {
     controller,
     headers,
     result: result.then(({data, error}) => {
       if (error) return {data: null, error};
+
       const obj = data.objects.map((x) => {
+        console.log(x);
         return {
           ...x,
           uploaded: new Date(x.uploaded),
