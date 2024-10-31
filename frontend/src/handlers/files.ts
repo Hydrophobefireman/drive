@@ -14,7 +14,6 @@ export function getFileList(u: string) {
       if (error) return {data: null, error};
 
       const obj = data.objects.map((x) => {
-        console.log(x);
         return {
           ...x,
           uploaded: new Date(x.uploaded),

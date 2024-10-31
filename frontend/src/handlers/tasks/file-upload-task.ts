@@ -165,9 +165,7 @@ export class FileUploadTask {
       return;
     }
 
-    const {preview: previewUploadURL, url, key} = resp.data;
-    console.log(resp.data);
-
+    const {preview: previewUploadURL, url, key} = resp.data
     this._key = key;
     const uploader = this.buildUploader(url);
     if (needs_preview) {
@@ -188,7 +186,7 @@ export class FileUploadTask {
     } else {
       uploader.headers({
         "content-type": this.file.type,
-        ...amzHeaders(url, uploadManager),
+        ...amzHeaders(url, uploadMetadata),
       });
     }
 
