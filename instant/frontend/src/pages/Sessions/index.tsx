@@ -21,7 +21,7 @@ import {Modal} from "@kit/modal";
 function fetchSession(
   x: string
 ): AbortableFetchResponse<
-  {url: string | null; createdAt: number} | {error: string}
+  {url: string | null; createdAt: number; name: string} | {error: string}
 > {
   if (!x)
     return {
@@ -93,6 +93,7 @@ export default function Session() {
   }
 
   const [showDownloadQr, setShowDownloadQr] = useState(false);
+  console.log({resp});
   if (!resp) return;
   if ("error" in resp) return <div>{resp.error}</div>;
   return (
@@ -202,7 +203,7 @@ export default function Session() {
                 },
               })}
               href={resp.url}
-              download
+              download={resp.name}
             >
               Download file
             </a>

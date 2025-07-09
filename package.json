@@ -4,18 +4,22 @@
   "description": "Drive monorepo",
   "main": "index.js",
   "scripts": {
-    "dev": "concurrently 'cd frontend && npm run dev' 'cd worker && wrangler dev --remote'",
-    "prepare": "husky install"
+    "old-dev": "concurrently 'cd frontend && npm run dev' 'cd worker && wrangler dev --remote'",
+    "dev": "sst dev --stage dev",
+    "prepare": "husky install",
+    "deploy": "NODE_ENV=production sst deploy --stage=production"
   },
   "author": "Hydrophobefireman",
   "license": "MIT",
   "private": true,
   "dependencies": {
+    "@pulumi/cloudflare": "^6.2.0",
     "husky": "^8.0.3",
+    "sst": "^3.17.10",
     "yarn": "^1.22.19"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20230710.1",
+    "@cloudflare/workers-types": "4.20250428.0",
     "concurrently": "^8.2.0",
     "typescript": "^5.1.6",
     "wrangler": "^3.2.0"

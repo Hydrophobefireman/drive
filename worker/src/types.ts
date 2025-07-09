@@ -1,3 +1,4 @@
+import type {KVNamespace, R2Bucket} from "@cloudflare/workers-types";
 export interface Env extends Record<string, any> {
   B_GALLERY: R2Bucket;
   B_PREVIEWS: R2Bucket;

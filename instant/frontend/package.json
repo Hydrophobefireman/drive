@@ -5,11 +5,11 @@
   "private": true,
   "main": "index.js",
   "scripts": {
-    "start": "cross-env NODE_ENV=development webpack-cli serve",
+    "dev": "cross-env NODE_ENV=development webpack-cli serve",
     "build": "cross-env NODE_ENV=production webpack --config webpack.config.js",
     "prebuild": "tsc --noEmit && node scripts/prebuild.js",
     "postbuild": "node scripts/postbuild.js",
-    "prepare": "cd .. && husky install instant"
+    "prepare": "cd ../.. && husky install instant/frontend"
   },
   "author": "Hudrophobefireman",
   "license": "ISC",
@@ -29,6 +29,7 @@
     "browserslist": "^4.21.5",
     "lightningcss": "^1.20.0",
     "qrcode": "^1.5.3",
+    "sst": "^3.17.10",
     "statedrive": "^0.0.16"
   },
   "devDependencies": {

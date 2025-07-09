@@ -1,0 +1,19 @@
+{
+	"name": "worker",
+	"version": "0.0.0",
+	"private": true,
+	"scripts": {
+		"deploy": "wrangler deploy",
+		"dev": "wrangler dev --test-scheduled",
+		"start": "wrangler dev --test-scheduled",
+		"cf-typegen": "wrangler types"
+	},
+	"devDependencies": {
+		"typescript": "^5.5.2",
+		"wrangler": "^4.24.0"
+	},
+	"dependencies": {
+		"aws4fetch": "^1.0.20",
+		"hono": "^4.8.4"
+	}
+}

@@ -15,7 +15,14 @@
       "@/*": ["./src/*"],
       "@kit": ["./node_modules/@hydrophobefireman/kit"],
       "@kit/*": ["./node_modules/@hydrophobefireman/kit/*"]
-    }
+    },
+    "skipLibCheck": true
   },
-  "exclude": [".babelconfig.js", "webpack.config.js", "./scripts/", "build/"]
+  "exclude": [
+    ".babelconfig.js",
+    "webpack.config.js",
+    "./scripts/",
+    "build/",
+    "sst-env.d.ts"
+  ]
 }

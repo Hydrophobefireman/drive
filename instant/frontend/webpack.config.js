@@ -14,6 +14,8 @@ const browserslist = require("browserslist");
 const mode = process.env.NODE_ENV;
 const isProd = mode === "production";
 const {outputDir, staticFilePrefix, inlineCSS, enableCatom, fonts} = uiConfig;
+
+const {EnvironmentPlugin} = require("webpack");
 const browserslistConfig = browserslistToTargets(
   browserslist("last 2 versions")
 );
@@ -25,6 +27,7 @@ function srcPath(subdir) {
   return path.join(__dirname, subdir);
 }
 
+console.log("API_URL: ", process.env.API_URL);
 const jsLoaderOptions = (isLegacy) => ({
   test: /\.(m?js|tsx?)$/,
   exclude: /(node_modules\/(?!(@hydrophobefireman|statedrive)))|(injectables)/,
@@ -187,6 +190,7 @@ function getCfg(isLegacy) {
         mode: isLegacy ? "legacy" : "modern",
         fonts,
       }),
+      new EnvironmentPlugin({API_URL: "http://localhost:3000"}),
     ].filter(Boolean),
   };
 }
