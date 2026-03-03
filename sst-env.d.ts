@@ -10,10 +10,6 @@ declare module "sst" {
       "type": "sst.sst.Linkable"
       "url": string
     }
-    "InstantDriveFrontend": {
-      "type": "sst.cloudflare.StaticSite"
-      "url": string
-    }
     "InstantDriveS3Compat": {
       "AccountId": string
       "BucketName": string
@@ -37,6 +33,7 @@ declare module "sst" {
     "InstantDriveCronHandler": cloudflare.Service
     "InstantDriveSessions": cloudflare.KVNamespace
     "InstantDriveWorker": cloudflare.Service
+    "frontend": cloudflare.Service
   }
 }
 

@@ -1,4 +1,5 @@
 /// <reference path="./.sst/platform/config.d.ts" />
+
 export default $config({
   app(input) {
     return {
@@ -12,9 +13,8 @@ export default $config({
     const domain = $dev
       ? "dev.instant.drive.hpfm.dev"
       : "cdn.instant.drive.hpfm.dev";
-    const {R2BucketCors, R2CustomDomain, PagesProject} = await import(
-      "@pulumi/cloudflare"
-    );
+    const {R2BucketCors, R2CustomDomain} = await import("@pulumi/cloudflare");
+    const {local} = await import("@pulumi/command");
     const bucket = new sst.cloudflare.Bucket("InstantDrive");
 
     const kv = new sst.cloudflare.Kv("InstantDriveSessions");
@@ -56,16 +56,26 @@ export default $config({
         : "api.instant.drive.hpfm.dev",
     });
 
-    const frontend = new sst.cloudflare.StaticSite("InstantDriveFrontend", {
+    const frontendBuild = local.runOutput({
+      environment: {
+        API_URL: instant.url as $util.Output<string>,
+        BUCKET_DOMAIN: domain,
+      },
+      // the code is run at: /drive/.sst/platform'
+      dir: "../../instant/frontend",
+      command: "npm run build",
+      logging: "stdoutAndStderr",
+    });
+
+    const frontend = new sst.cloudflare.Worker("frontend", {
+      handler: "./instant/frontend/worker.ts",
+      assets: {
+        directory: frontendBuild.apply((_) => "./instant/frontend/build"),
+      },
+      url: true,
       domain: $dev
         ? "frontend.dev.instant.drive.hpfm.dev"
         : "instant.drive.hpfm.dev",
-      path: "instant/frontend",
-      build: {
-        command: "npm run build",
-        output: "build",
-      },
-      environment: {API_URL: instant.url, BUCKET_DOMAIN: domain},
     });
     const cron = new sst.cloudflare.Cron("InstantDriveCron", {
       job: {
