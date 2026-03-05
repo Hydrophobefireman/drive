@@ -22,6 +22,7 @@
     "webpack.config.js",
     "./scripts/",
     "build/",
-    "build_static/"
+    "build_static/",
+    "sst-env.d.ts"
   ]
 }

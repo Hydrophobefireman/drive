@@ -13,16 +13,15 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
-    "@pulumi/cloudflare": "^6.2.0",
-    "@pulumi/command": "^1.2.0",
+    "@pulumi/cloudflare": "^6.13.0",
+    "@pulumi/command": "^1.2.1",
     "husky": "^8.0.3",
-    "sst": "^3.17.10",
-    "yarn": "^1.22.19"
+    "sst": "^4.1.10 "
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "4.20250428.0",
-    "concurrently": "^8.2.0",
-    "typescript": "^5.1.6",
-    "wrangler": "^3.2.0"
+    "@cloudflare/workers-types": "^4.20260305.1",
+    "concurrently": "^9.2.1",
+    "typescript": "^5.9.3",
+    "wrangler": "^4.70.0"
   }
 }
